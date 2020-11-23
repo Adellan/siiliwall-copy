@@ -7,6 +7,7 @@ const TICKET_MOVED_IN_COLUMN = 'TICKET_MOVED_IN_COLUMN'
 const TICKET_MOVED_FROM_COLUMN = 'TICKET_MOVED_FROM_COLUMN'
 const COLUMN_DELETED = 'COLUMN_DELETED'
 const COLUMN_MUTATED = 'COLUMN_MUTATED'
+const COLUMN_MOVED = 'COLUMN_MOVED'
 
 const schema = {
     Query: {
@@ -38,6 +39,12 @@ const schema = {
         columnMutated: {
             subscribe: withFilter(
                 () => pubsub.asyncIterator(COLUMN_MUTATED),
+                (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId),
+            ),
+        },
+        columnMoved: {
+            subscribe: withFilter(
+                () => pubsub.asyncIterator(COLUMN_MOVED),
                 (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId),
             ),
         },

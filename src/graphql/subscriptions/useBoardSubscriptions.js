@@ -1,11 +1,19 @@
-/* eslint-disable max-len */
 import { useSubscription } from '@apollo/client'
 import { SUBTASK_REMOVED, SUBTASK_MUTATED } from '../subtask/subtaskQueries'
 import { TASK_MUTATED, TASK_REMOVED, SWIMLANE_MOVED } from '../task/taskQueries'
 import { TICKET_MOVED_IN_COLUMN, TICKET_MOVED_FROM_COLUMN } from '../ticket/ticketQueries'
-import { COLUMN_MUTATED, COLUMN_DELETED } from '../column/columnQueries'
+import { COLUMN_MUTATED, COLUMN_DELETED, COLUMN_MOVED } from '../column/columnQueries'
 import {
-    removeSubtaskFromCache, removeTaskFromCache, addNewSubtask, addNewTask, cacheTicketMovedInColumn, cacheTicketMovedFromColumn, deleteColumnFromCache, updateSwimlaneOrderOfBoardToTheCache, addNewColumn,
+    removeSubtaskFromCache,
+    removeTaskFromCache,
+    addNewSubtask,
+    addNewTask,
+    cacheTicketMovedInColumn,
+    cacheTicketMovedFromColumn,
+    deleteColumnFromCache,
+    updateSwimlaneOrderOfBoardToTheCache,
+    addNewColumn,
+    cacheColumnMoved,
 } from '../../cacheService/cacheUpdates'
 
 const useBoardSubscriptions = (id, eventId) => {
@@ -26,6 +34,17 @@ const useBoardSubscriptions = (id, eventId) => {
                 if (data.columnDeleted.removeType === 'DELETED') {
                     deleteColumnFromCache(columnId, boardId)
                 }
+            },
+        })
+    useSubscription(COLUMN_MOVED,
+        {
+            variables: { boardId: id, eventId },
+            onSubscriptionData: ({ subscriptionData: { data } }) => {
+                console.log('dataa ', data)
+                /* const {
+                    boardId, newColumnOrder,
+                } = data.columnMoved
+                cacheColumnMoved(boardId, newColumnOrder) */
             },
         })
     useSubscription(SUBTASK_REMOVED,
@@ -56,11 +75,11 @@ const useBoardSubscriptions = (id, eventId) => {
     useSubscription(TASK_MUTATED,
         {
             variables: { boardId: id, eventId },
+            // At some point different kind of actions will be taken according to the mutationType
+            // E.g. notifying the user that something got updated when mutationType is "UPDATED"
+            // At the moment the values of the UPDATE subscription response are automatically
+            // updated to the cache to the correct task entity
             onSubscriptionData: ({ subscriptionData: { data } }) => {
-                // At some point different kind of actions will be taken according to the mutationType
-                // For example notifying the user that something got updated when mutationType is "UPDATED"
-                // At the moment the values of the UPDATE subscription response are automatically
-                // updated to the cache to the correct task entity
                 if (data.taskMutated.mutationType === 'CREATED') {
                     addNewTask(data.taskMutated.node)
                 }
@@ -91,7 +110,9 @@ const useBoardSubscriptions = (id, eventId) => {
                 const {
                     ticketInfo, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder,
                 } = data.ticketMovedFromColumn
-                cacheTicketMovedFromColumn(ticketInfo, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder)
+                cacheTicketMovedFromColumn(
+                    ticketInfo, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder,
+                )
             },
         })
     useSubscription(SWIMLANE_MOVED,

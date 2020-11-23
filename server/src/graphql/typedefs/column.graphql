@@ -42,11 +42,17 @@ type Subscription {
   ticketMovedFromColumn(boardId: ID!, eventId: ID!): TicketMovedFromColumnPayload!
   columnDeleted(boardId: ID!, eventId: ID!): ColumnRemovePayload!
   columnMutated(boardId: ID!, eventId: ID!): ColumnMutatedPayload!
+  columnMoved(boardId: ID!, eventId: ID!, newColumnOrder: [ID!]!): ColumnMovedPayload!
 }
 
 type ColumnMutatedPayload {
   mutationType: MutationType!
   column: Column!
+}
+
+type ColumnMovedPayload {
+  column: Column
+  newColumnOrder: [ID!]
 }
 
 enum MutationType {

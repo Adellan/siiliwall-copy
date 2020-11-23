@@ -16,29 +16,33 @@ const schema = {
         swimlaneMoved: {
             subscribe: withFilter(
                 () => pubsub.asyncIterator(SWIMLANE_MOVED),
-                (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId),
+                (payload, args) => (
+                    args.boardId === payload.boardId && args.eventId !== payload.eventId
+                ),
             ),
         },
         boardAdded: {
             subscribe: withFilter(
                 () => pubsub.asyncIterator(BOARD_ADDED),
-                (payload, args) => {
-                    return (args.projectId === payload.projectId && args.eventId !== payload.eventId)
-                }
+                (payload, args) => (
+                    args.boardId === payload.boardId && args.eventId !== payload.eventId
+                ),
             ),
         },
     },
 
     Mutation: {
-        async addBoard(root, { name, prettyId, eventId, projectId }) {
+        async addBoard(root, {
+            name, prettyId, eventId, projectId,
+        }) {
             const addedBoard = await dataSources.boardService.addBoard(name, prettyId, projectId)
             pubsub.publish(BOARD_ADDED, {
                 projectId,
                 eventId,
                 boardAdded: {
                     mutationType: 'CREATED',
-                    board: addedBoard.dataValues
-                }
+                    board: addedBoard.dataValues,
+                },
             })
             return addedBoard
         },

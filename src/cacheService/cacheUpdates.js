@@ -1,9 +1,17 @@
 /* eslint-disable array-callback-return */
-/* eslint-disable max-len */
 /* eslint-disable import/prefer-default-export */
 import { client } from '../apollo'
 import {
-    TICKETORDER_AND_TASKS, SWIMLANE_ORDER, TICKETORDER, SUBTASKS, COLUMNORDER, TICKETORDER_AND_SUBTASKS, SUBTASKS_COLUMN, SWIMLANE_ORDER_NUMBER, PROJECTS_BOARDS, COLUMNORDER_AND_COLUMNS,
+    TICKETORDER_AND_TASKS,
+    SWIMLANE_ORDER,
+    TICKETORDER,
+    SUBTASKS,
+    COLUMNORDER,
+    TICKETORDER_AND_SUBTASKS,
+    SUBTASKS_COLUMN,
+    SWIMLANE_ORDER_NUMBER,
+    PROJECTS_BOARDS,
+    COLUMNORDER_AND_COLUMNS,
 } from '../graphql/fragments'
 
 export const addNewColumn = (addedColumn) => {
@@ -74,7 +82,7 @@ export const addNewTask = (addedTask) => {
 }
 
 export const removeTaskFromCache = (taskId, columnId, boardId) => {
-    // Deleting task affects column's tasks list, column's ticketOrder list and board's swimlaneOrder list
+    // Deleting task affects column's tasks list, column's ticketOrder and board's swimlaneOrder
     // In addition the normalized cache object is deleted itself
     const taskToBeDeleted = `Task:${taskId}`
     const columnIdForCache = `Column:${columnId}`
@@ -196,7 +204,13 @@ const updateTheColumnOfTheMovedSubtask = (ticketId, columnId) => {
     })
 }
 
-export const cacheTicketMovedFromColumn = (ticketInfo, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder) => {
+export const cacheTicketMovedFromColumn = (
+    ticketInfo,
+    sourceColumnId,
+    destColumnId,
+    sourceTicketOrder,
+    destTicketOrder,
+) => {
     // Column attribute of the moved subtask has to be updated to the
     // cache in order to avoid lagging when subtask is moved
     updateTheColumnOfTheMovedSubtask(ticketInfo.ticketId, destColumnId)
@@ -212,7 +226,8 @@ export const cacheTicketMovedFromColumn = (ticketInfo, sourceColumnId, destColum
     })
 
     if (ticketInfo.type === 'task') {
-        const newSourceTasks = Array.from(sourceColumn.tasks).filter((task) => task.id !== ticketInfo.ticketId)
+        const newSourceTasks = Array.from(sourceColumn.tasks)
+            .filter((task) => task.id !== ticketInfo.ticketId)
         const movedTicket = sourceColumn.tasks.find((task) => task.id === ticketInfo.ticketId)
         const newDestinationTasks = Array.from(destinationColumn.tasks).concat(movedTicket)
         client.writeFragment({
@@ -232,8 +247,10 @@ export const cacheTicketMovedFromColumn = (ticketInfo, sourceColumnId, destColum
             },
         })
     } else {
-        const newSourceSubtasks = Array.from(sourceColumn.subtasks).filter((subtask) => subtask.id !== ticketInfo.ticketId)
-        const movedTicket = sourceColumn.subtasks.find((subtask) => subtask.id === ticketInfo.ticketId)
+        const newSourceSubtasks = Array.from(sourceColumn.subtasks)
+            .filter((subtask) => subtask.id !== ticketInfo.ticketId)
+        const movedTicket = sourceColumn.subtasks
+            .find((subtask) => subtask.id === ticketInfo.ticketId)
         const newDestinationSubtasks = Array.from(destinationColumn.subtasks).concat(movedTicket)
 
         client.writeFragment({
@@ -255,7 +272,9 @@ export const cacheTicketMovedFromColumn = (ticketInfo, sourceColumnId, destColum
     }
 }
 
-export const updateSwimlaneOrderOfBoardToTheCache = (boardId, affectedSwimlanes, newSwimlaneOrder) => {
+export const updateSwimlaneOrderOfBoardToTheCache = (
+    boardId, affectedSwimlanes, newSwimlaneOrder,
+) => {
     client.writeFragment({
         id: `Board:${boardId}`,
         fragment: SWIMLANE_ORDER,
@@ -273,5 +292,16 @@ export const updateSwimlaneOrderOfBoardToTheCache = (boardId, affectedSwimlanes,
                 swimlaneOrderNumber: task.swimlaneOrderNumber,
             },
         })
+    })
+}
+
+export const cacheColumnMoved = (boardId, newColumnOrder) => {
+    const boardIdForCache = boardId
+    client.writeFragment({
+        id: boardIdForCache,
+        fragment: COLUMNORDER,
+        data: {
+            columnOrder: newColumnOrder,
+        },
     })
 }
