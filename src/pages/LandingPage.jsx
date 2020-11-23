@@ -5,6 +5,7 @@ import { projectPageStyles } from '../styles/styles'
 import '../styles.css'
 import useAllProjects from '../graphql/project/hooks/useAllProjects'
 import NewProjectForm from '../components/project/NewProjectForm'
+import Header from '../components/Header'
 
 const LandingPage = () => {
     const queryResult = useAllProjects()
@@ -25,8 +26,8 @@ const LandingPage = () => {
             alignItems="center"
             justify="center"
             classes={{ root: classes.root }}
-            spacing={7}
         >
+            <Header landing={true} />
             {open && <NewProjectForm setOpen={setOpen} open={open} />}
             <Grid item classes={{ root: classes.title }}>
                 <h1 id="landingTitle">Welcome!</h1>

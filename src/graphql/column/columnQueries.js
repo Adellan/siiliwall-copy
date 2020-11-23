@@ -25,8 +25,8 @@ export const DELETE_COLUMN = gql`
     }
 `
 export const EDIT_COLUMN = gql`
-    mutation editColumn($columnId: ID!, $columnName: String!) {
-        editColumnById(id: $columnId, name: $columnName ) {
+    mutation editColumn($columnId: ID!, $columnName: String!, $boardId: ID!, $eventId: ID!) {
+        editColumnById(id: $columnId, name: $columnName, boardId: $boardId, eventId: $eventId ) {
             id
             name
         }
@@ -40,6 +40,7 @@ export const COLUMN_MUTATED = gql`
             column {
                 id
                 name
+                orderNumber
                 board {
                     id
                 }

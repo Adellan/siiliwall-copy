@@ -13,6 +13,7 @@ const resolvers = require('./graphql/resolvers')
 
 const schema = makeExecutableSchema({ typeDefs, resolvers })
 app.use('/graphql', bodyParser.json())
+app.use('/health', require('express-healthcheck')())
 
 const apollo = new ApolloServer({ schema })
 apollo.applyMiddleware({ app, path: '/graphql' })
@@ -23,14 +24,14 @@ apollo.installSubscriptionHandlers(app)
 server.listen({ port: config.PORT }, () => {
     console.log(`Server running on port ${config.PORT}`)
     // eslint-disable-next-line no-new
-    new SubscriptionServer({
+    /* new SubscriptionServer({
         execute,
         subscribe,
         schema,
     }, {
         server,
         path: '/graphql',
-    })
+    }) */
 })
 
 const closeHttpServer = () => {

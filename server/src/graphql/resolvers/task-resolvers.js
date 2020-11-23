@@ -141,7 +141,7 @@ const schema = {
         },
         colors(root) {
             return dataSources.boardService.getColorsByTaskId(root.id)
-        }
+        },
     },
 }
 

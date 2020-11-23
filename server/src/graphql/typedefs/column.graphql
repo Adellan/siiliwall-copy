@@ -30,7 +30,7 @@ type Query {
 
 type Mutation {
   addColumnForBoard(boardId: ID!, columnName: String!, eventId: ID!): Column
-  editColumnById(id: ID!, name: String!): Column
+  editColumnById(id: ID!, name: String!, boardId: ID!, eventId: ID!): Column
   deleteColumnById(id: ID!, boardId: ID!, eventId: ID!): ID
   moveTicketInColumn(newOrder: [TicketOrderInput!]!, columnId: ID!, boardId: ID!): Column
   moveTicketFromColumn(type: String!, ticketId: ID!, sourceColumnId: ID!, destColumnId: ID!, sourceTicketOrder: [TicketOrderInput!]!, destTicketOrder: [TicketOrderInput!]!, eventId: ID!): [Column!]

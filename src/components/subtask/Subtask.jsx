@@ -60,8 +60,8 @@ const Subtask = ({ subtask, index, columnId }) => {
                         justify="space-between"
                         alignItems="center"
                     >
-                        <Grid item classes={{ root: classes.subtaskTitle }}>
-                            <p>{subtask.prettyId}</p>
+                        <Grid item classes={{ root: classes.subtaskTaskPrettyId }}>
+                            <p>{subtask.task.prettyId}</p>
                         </Grid>
                         <Grid item classes={{ root: classes.subtaskDropdownGrid }} onClick={handleDialogClick}>
                             <DropDownSubtask
@@ -71,6 +71,9 @@ const Subtask = ({ subtask, index, columnId }) => {
                         </Grid>
                     </Grid>
                     <Grid item container direction="column" spacing={1}>
+                        <Grid item classes={{ root: classes.subtaskPrettyId }}>
+                            <p>{subtask.prettyId}</p>
+                        </Grid>
                         <Grid item classes={{ root: classes.subtaskName }}>
                             <p>{add3Dots(subtask.name)}</p>
                         </Grid>

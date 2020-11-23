@@ -69,10 +69,24 @@ const schema = {
             return createdColumn
         },
 
-        editColumnById(root, {
-            id, name,
+        async editColumnById(root, {
+            id, name, boardId, eventId,
         }) {
-            return dataSources.boardService.editColumnById(id, name)
+            let editedColumn
+            try {
+                editedColumn = await dataSources.boardService.editColumnById(id, name)
+                pubsub.publish(COLUMN_MUTATED, {
+                    boardId,
+                    eventId,
+                    columnMutated: {
+                        mutationType: 'EDITED',
+                        column: editedColumn.dataValues,
+                    },
+                })
+            } catch (e) {
+                console.log(e)
+            }
+            return editedColumn
         },
 
         async deleteColumnById(root, { id, boardId, eventId }) {

@@ -28,7 +28,7 @@ const ColumnList = ({ columns, columnOrder, boardId }) => {
 
     const newColumnOrder = columnOrder.map((id) => columns.find((column) => column.id === id))
     return (
-        <Grid container direction="row" spacing={3} classes={{ root: classes.columnRow }}>
+        <Grid container direction="row" spacing={4} classes={{ root: classes.columnRow }}>
             {newColumnOrder.map((column, index) => (
                 <Grid item key={column.id}>
                     <Column column={column} index={index} />

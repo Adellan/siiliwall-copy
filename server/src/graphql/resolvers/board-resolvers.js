@@ -25,7 +25,7 @@ const schema = {
             subscribe: withFilter(
                 () => pubsub.asyncIterator(BOARD_ADDED),
                 (payload, args) => (
-                    args.boardId === payload.boardId && args.eventId !== payload.eventId
+                    args.projectId === payload.projectId && args.eventId !== payload.eventId
                 ),
             ),
         },

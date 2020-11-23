@@ -30,17 +30,17 @@ const Column = ({ column, index }) => {
                     ref={provided.innerRef}
                     spacing={2}
                 >
-                    <Grid classes={{ root: classes.columnHeader }} item container direction='row' justify='space-between' {...provided.dragHandleProps} >
+                    <Grid classes={{ root: classes.columnHeader }} item container direction="row" justify="space-between" {...provided.dragHandleProps}>
                         <Grid item>
                             <RenameColumn editId={column.id} column={column} />
                         </Grid>
-                        <Grid item container direction='row' alignItems='center' justify='flex-end' classes={{ root: classes.columnButtonGrid }}>
-                            <Grid item >
+                        <Grid item container direction="row" alignItems="center" justify="flex-end" classes={{ root: classes.columnButtonGrid }}>
+                            <Grid item>
                                 <Button classes={{ root: classes.columnButton }}>
                                     <AddIcon classes={{ root: classes.columnButtonIcons }} onClick={toggleDialog} />
                                 </Button>
                             </Grid>
-                            <Grid item >
+                            <Grid item>
                                 <DropdownColumn columnId={column.id} boardId={column.board.id} />
                             </Grid>
                         </Grid>
@@ -52,7 +52,6 @@ const Column = ({ column, index }) => {
                                 item
                                 container
                                 classes={{ root: classes.ticketList }}
-
                                 {...provided.droppableProps}
                                 ref={provided.innerRef}
                             >

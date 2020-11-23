@@ -7,6 +7,7 @@ import NewUserForm from '../components/user/NewUserForm'
 import { projectPageStyles } from '../styles/styles'
 import '../styles.css'
 import useProjectSubscriptions from '../graphql/subscriptions/useProjectSubscriptions'
+import Header from '../components/Header'
 
 const ProjectPage = ({ id, eventId }) => {
     const queryResult = useProjectById(id)
@@ -34,8 +35,8 @@ const ProjectPage = ({ id, eventId }) => {
             alignItems="center"
             justify="center"
             classes={{ root: classes.root }}
-            spacing={7}
         >
+            <Header projectName={projectName} />
             {open && <NewBoardForm setOpen={setOpen} open={open} projectId={id} />}
             {openUserForm && <NewUserForm setOpen={setUserFormOpen} open={openUserForm} />}
             <Grid item classes={{ root: classes.title }}>

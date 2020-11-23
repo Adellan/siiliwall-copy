@@ -18,7 +18,7 @@ const TicketList = ({
         return foundTicket
     })
     return (
-        <Grid container direction="column" alignItems='center' spacing={2}>
+        <Grid container direction="column" alignItems="center">
             {ticketsInOrder.map((ticket, index) => {
                 let component
                 if (ticket.type === 'task') {

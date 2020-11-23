@@ -16,9 +16,43 @@ const colours = {
 
 const font = 'Arial Regular'
 
+export const headerStyles = makeStyles({
+    header: {
+        backgroundColor: colours.black,
+        width: '100%',
+        fontFamily: font,
+        marginBottom: 20,
+        height: 105,
+        paddingLeft: 20,
+    },
+
+    headerTitle: {
+        color: colours.white,
+        width: 400,
+        fontFamily: font,
+        fontSize: 36,
+        fontWeight: 'lighter',
+    },
+
+    boardHeaderLeft: {
+        width: '50%',
+    },
+
+    boardHeaderRight: {
+        width: '50%',
+        justifySelf: 'flex-end',
+    },
+
+    headerPrettyId: {
+        fontSize: 12,
+        fontFamily: font,
+    },
+})
+
 export const projectPageStyles = makeStyles({
     root: {
-        minHeight: '100vh',
+        minHeight: '100%',
+        minWidth: '100%',
     },
 
     title: {
@@ -63,13 +97,18 @@ export const boardPageStyles = makeStyles({
     root: {
         minHeight: '100%',
         minWidth: '100%',
-        padding: 30,
     },
 
     // BOARD STYLES
+    board: {
+        marginLeft: 30,
+        marginTop: 15,
+    },
+
     boardHeader: {
         width: '100%',
         fontFamily: font,
+        marginBottom: 20,
     },
 
     addColumn: {
@@ -121,6 +160,7 @@ export const boardPageStyles = makeStyles({
         borderRadius: 4,
         backgroundColor: colours.white,
         width: 320,
+        marginBottom: 10,
     },
 
     taskButtonIcons: {
@@ -182,6 +222,7 @@ export const boardPageStyles = makeStyles({
         backgroundColor: '#fff',
         minHeight: 115,
         width: 320,
+        marginBottom: 10,
     },
 
     subtaskHeader: {
@@ -190,19 +231,8 @@ export const boardPageStyles = makeStyles({
         height: 33,
     },
 
-    subtaskTitle: {
+    subtaskTaskPrettyId: {
         fontSize: 14,
-        marginLeft: 5,
-        fontFamily: font,
-    },
-
-    subtaskHeaderTitleItem: {
-        width: 200,
-    },
-
-    subtaskName: {
-        fontSize: 18,
-        marginTop: 5,
         marginLeft: 5,
         fontFamily: font,
     },
@@ -210,6 +240,19 @@ export const boardPageStyles = makeStyles({
     subtaskDropdownGrid: {
         height: 30,
         minWidth: 30,
+    },
+
+    subtaskPrettyId: {
+        color: '#949494',
+        fontFamily: font,
+        marginLeft: 5,
+        marginTop: 5,
+    },
+
+    subtaskName: {
+        fontSize: 18,
+        marginLeft: 5,
+        fontFamily: font,
     },
 
     subtaskButtonIcons: {
@@ -279,15 +322,65 @@ export const boardPageStyles = makeStyles({
 })
 
 export const swimlaneStyles = makeStyles({
+
+    swimlaneView: {
+        paddingLeft: 30,
+    },
+
+    swimlaneAddButtonGrid: {
+        width: '20%',
+    },
+
+    swimlaneToggleSwimlanesButtonGrid: {
+        width: '80%',
+    },
+
+    swimlaneAddTaskButton: {
+        color: colours.blue,
+        marginLeft: 5,
+        fontFamily: font,
+        fontSize: 14,
+    },
+
+    swimlaneHideButton: {
+        color: colours.blue,
+        fontFamily: font,
+        fontSize: 14,
+    },
+
+    swimlaneShowButton: {
+        color: colours.blue,
+        marginRight: 5,
+        fontFamily: font,
+        fontSize: 14,
+    },
+
     swimlaneColumnNames: {
-        width: '100%',
         flexWrap: 'nowrap',
+        backgroundColor: colours.lightergrey,
+    },
+
+    swimlaneColumnGrid: {
+        width: 350,
+        fontFamily: font,
+        fontWeight: 600,
+        height: 50,
+    },
+
+    swimlaneColumnNameGrid: {
+        width: '99%',
     },
 
     swimlaneColumnName: {
-        textAlign: 'center',
-        width: 335,
-        fontFamily: font,
+        paddingLeft: 15,
+    },
+
+    swimlaneNumberOfTasks: {
+        paddingRight: 20,
+    },
+
+    swimlaneColumnDivider: {
+        width: '1%',
     },
 
     swimlane: {
@@ -338,6 +431,8 @@ export const swimlaneStyles = makeStyles({
     swimlaneColumn: {
         width: 327,
         flexWrap: 'nowrap',
+        paddingTop: 15,
+        paddingBottom: 15,
     },
 
     swimlanePrettyId: {

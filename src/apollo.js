@@ -5,8 +5,13 @@ import {
 import { WebSocketLink } from '@apollo/client/link/ws'
 import { getMainDefinition } from '@apollo/client/utilities'
 
+require('dotenv').config('../.env')
+
+const loadBalancerUri = process.env.LOADBALANCER_URI
+const backEndUri = process.env.NODE_ENV === 'production' ? loadBalancerUri : 'http://localhost:4001/graphql'
+
 const httpLink = new HttpLink({
-    uri: 'http://localhost:4001/graphql',
+    uri: backEndUri,
 })
 
 const wsLink = new WebSocketLink({
@@ -29,7 +34,7 @@ const splitLink = split(
 )
 
 export const client = new ApolloClient({
-    link: splitLink,
+    link: httpLink,
     cache: new InMemoryCache({
         typePolicies: {
             Board: {
@@ -85,8 +90,8 @@ export const client = new ApolloClient({
                     colors: {
                         merge(existing, incoming) {
                             return [...incoming]
-                        }
-                    }
+                        },
+                    },
                 },
             },
             Subtask: {
@@ -94,10 +99,10 @@ export const client = new ApolloClient({
                     colors: {
                         merge(existing, incoming) {
                             return [...incoming]
-                        }
-                    }
-                }
-            }
+                        },
+                    },
+                },
+            },
         },
     }),
 })
