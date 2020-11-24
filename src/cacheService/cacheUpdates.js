@@ -14,6 +14,17 @@ import {
     COLUMNORDER_AND_COLUMNS,
 } from '../graphql/fragments'
 
+export const cacheColumnMoved = (boardId, newColumnOrder) => {
+    console.log('moi')
+    client.writeFragment({
+        id: boardId,
+        fragment: COLUMNORDER,
+        data: {
+            columnOrder: newColumnOrder,
+        },
+    })
+}
+
 export const addNewColumn = (addedColumn) => {
     const boardIdForCache = `Board:${addedColumn.board.id}`
     const { columnOrder, columns } = client.readFragment({

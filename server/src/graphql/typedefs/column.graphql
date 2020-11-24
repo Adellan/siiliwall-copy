@@ -42,7 +42,7 @@ type Subscription {
   ticketMovedFromColumn(boardId: ID!, eventId: ID!): TicketMovedFromColumnPayload!
   columnDeleted(boardId: ID!, eventId: ID!): ColumnRemovePayload!
   columnMutated(boardId: ID!, eventId: ID!): ColumnMutatedPayload!
-  columnMoved(boardId: ID!, eventId: ID!): ColumnMovedPayload!
+  columnMoved(boardId: ID!, eventId: ID!): columnMovedPayload!
 }
 
 type ColumnMutatedPayload {
@@ -50,7 +50,7 @@ type ColumnMutatedPayload {
   column: Column!
 }
 
-type ColumnMovedPayload {
+type columnMovedPayload {
   boardId: ID!
   newColumnOrder: [ID!]
 }
