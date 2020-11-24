@@ -5,7 +5,7 @@ import { swimlaneStyles } from '../../styles/styles'
 import DropdownTask from '../task/DropdownTask'
 
 const SwimlaneHeaderRow = ({
-    task, columnId, boardId, prettyId, title, numberOfSubtasks, handleShowClick, toggleEditTaskDialog, show
+    task, column, boardId, prettyId, title, numberOfSubtasks, handleShowClick, toggleEditTaskDialog, show,
 }) => {
     const classes = swimlaneStyles()
     const handleDialogClick = (e) => e.stopPropagation()
@@ -19,8 +19,7 @@ const SwimlaneHeaderRow = ({
                     >
                         {!show
                             ? <ExpandMore />
-                            : <ExpandLess />
-                        }
+                            : <ExpandLess />}
                     </IconButton>
                 </Grid>
                 <Grid item classes={{ root: classes.swimlanePrettyId }}><p>{prettyId}</p></Grid>
@@ -31,7 +30,7 @@ const SwimlaneHeaderRow = ({
                 <Grid item classes={{ root: classes.taskDropdownButtonSwimlane }} onClick={(e) => handleDialogClick(e)}>
                     <DropdownTask
                         task={task}
-                        columnId={columnId}
+                        column={column}
                         boardId={boardId}
                         calledFromSwimlane={true}
                     />

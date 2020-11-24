@@ -7,7 +7,7 @@ import { swimlaneStyles } from '../../styles/styles'
 import Subtask from '../subtask/Subtask'
 
 const SwimlaneColumn = ({
-    swimlaneColumn, taskId, isTheLeftMost, mostSubtasks,
+    swimlaneColumn, taskId, isTheLeftMost, mostSubtasks, boardId,
 }) => {
     const { subtasks } = swimlaneColumn
     const classes = swimlaneStyles()
@@ -28,7 +28,7 @@ const SwimlaneColumn = ({
                     >
                         {subtasks.map((subtask) => (
                             <Grid item key={subtask.id}>
-                                <Subtask subtask={subtask} index={subtask.index} columnId={swimlaneColumn.id} />
+                                <Subtask subtask={subtask} index={subtask.index} column={swimlaneColumn} boardId={boardId} />
                             </Grid>
                         ))}
                         {provided.placeholder}

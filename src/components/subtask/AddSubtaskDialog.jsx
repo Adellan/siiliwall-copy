@@ -9,8 +9,9 @@ import useAddSubtask from '../../graphql/subtask/hooks/useAddSubtask'
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
 import { TICKETORDER, BOARDS_COLUMNS_AND_COLUMNORDER } from '../../graphql/fragments'
 import useAllColors from '../../graphql/task/hooks/useAllColors'
+import { useSnackbarContext } from '../../contexts/SnackbarContext'
 
-const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, boardId }) => {
+const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, column, taskId, boardId }) => {
     const userQuery = useAllUsers()
     const colorQuery = useAllColors()
     const classes = boardPageStyles()
@@ -23,6 +24,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
     const [members, setMembers] = useState([])
     const [colors, setColors] = useState([])
     const [inputColumnId, setInputColumnId] = useState(null)
+    const { setSnackbarMessage } = useSnackbarContext()
 
     const { columns, columnOrder } = client.cache.readFragment({
         id: `Board:${boardId}`,
@@ -30,7 +32,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
     })
     if (userQuery.loading || colorQuery.loading) return null
 
-    const columnOfParentTask = columns.find((col) => col.id === columnId)?.name
+    const columnNameOfParentTask = columns.find((col) => col.id === column.id)?.name
 
     const handleNameChange = (event) => {
         setName(event.target.value)
@@ -78,14 +80,14 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
         event.preventDefault()
         // Get the ticketOrder of the column to which user is creating the subtask
         const { ticketOrder } = client.cache.readFragment({
-            id: `Column:${inputColumnId || columnId}`,
+            id: `Column:${inputColumnId || column.id}`,
             fragment: TICKETORDER,
         })
         const ticketOrderWithoutTypename = ticketOrder.map((obj) => ({ ticketId: obj.ticketId, type: obj.type }))
         const eventId = window.localStorage.getItem('eventId')
         addSubtask({
             variables: {
-                columnId: inputColumnId || columnId,
+                columnId: inputColumnId || column.id,
                 taskId,
                 boardId,
                 ownerId: owner,
@@ -100,6 +102,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
         })
         emptyState()
         toggleAddDialog(event)
+        setSnackbarMessage('New subtask created')
     }
 
     const handleCancel = (e) => {
@@ -189,7 +192,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
                     />
                     <Select
                         className="selectField"
-                        placeholder={`Select column - ${columnOfParentTask}`}
+                        placeholder={`Select column - ${columnNameOfParentTask}`}
                         options={columnsData}
                         onChange={handleColumnChange}
                     />

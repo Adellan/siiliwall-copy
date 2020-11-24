@@ -5,7 +5,7 @@ import { projectPageStyles } from '../styles/styles'
 import '../styles.css'
 import useAllProjects from '../graphql/project/hooks/useAllProjects'
 import NewProjectForm from '../components/project/NewProjectForm'
-import Header from '../components/Header'
+import Header from '../components/utils/Header'
 
 const LandingPage = () => {
     const queryResult = useAllProjects()
@@ -30,7 +30,7 @@ const LandingPage = () => {
             <Header landing={true} />
             {open && <NewProjectForm setOpen={setOpen} open={open} />}
             <Grid item classes={{ root: classes.title }}>
-                <h1 id="landingTitle">Welcome!</h1>
+                <h1 data-cy="landingTitle">Welcome!</h1>
             </Grid>
             <Grid
                 item
@@ -40,7 +40,7 @@ const LandingPage = () => {
                 spacing={3}
             >
                 <Grid item>
-                    <Button onClick={handleClickOpen} classes={{ root: classes.addNewButton }} id="addButton">
+                    <Button onClick={handleClickOpen} classes={{ root: classes.addNewButton }} data-cy="addButton">
                         Add Project
                     </Button>
                 </Grid>
@@ -53,7 +53,7 @@ const LandingPage = () => {
                 spacing={2}
             >
                 {projectsInOrder.map(({ id, name }) => (
-                    <Grid item classes={{ root: classes.boardButtonGrid }} key={id}>
+                    <Grid item classes={{ root: classes.boardButtonGrid }} key={id} data-cy="projectGrid">
                         <Link to={`/projects/${id}`} className="boardList__button__link">
                             <Button fullWidth classes={{ root: classes.boardButton }}>
                                 {name}
@@ -65,4 +65,5 @@ const LandingPage = () => {
         </Grid>
     )
 }
+
 export default LandingPage

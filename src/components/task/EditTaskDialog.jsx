@@ -10,6 +10,7 @@ import {
 } from './validationSchema'
 import { boardPageStyles } from '../../styles/styles'
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
+import { useSnackbarContext } from '../../contexts/SnackbarContext'
 import useAllColors from '../../graphql/task/hooks/useAllColors'
 
 const EditTaskDialog = ({
@@ -31,6 +32,7 @@ const EditTaskDialog = ({
     const arrayOfOldColorIds = task?.colors?.map((color) => color.id)
     const animatedComponents = makeAnimated()
     const classes = boardPageStyles()
+    const { setSnackbarMessage } = useSnackbarContext()
 
     useEffect(() => {
         setTitle(task.title)
@@ -112,6 +114,7 @@ const EditTaskDialog = ({
             })
             toggleDialog()
         }
+        setSnackbarMessage('Changes saved')
     }
 
     const recoverState = () => {

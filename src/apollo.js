@@ -34,9 +34,18 @@ const splitLink = split(
 )
 
 export const client = new ApolloClient({
-    link: httpLink,
+    link: splitLink,
     cache: new InMemoryCache({
         typePolicies: {
+            Project: {
+                fields: {
+                    boards: {
+                        merge(existing, incoming = []) {
+                            return [...incoming]
+                        },
+                    }
+                }
+            },
             Board: {
                 fields: {
                     columns: {

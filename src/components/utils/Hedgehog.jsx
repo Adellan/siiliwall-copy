@@ -1,5 +1,5 @@
 import React from 'react'
-import whiteHedgehog from '../pics/whiteHedgehog.PNG'
+import whiteHedgehog from '../../pics/whiteHedgehog.PNG'
 
 const Hedgehog = () => (
 

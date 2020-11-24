@@ -2,31 +2,16 @@ import React, { useState } from 'react'
 import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
 } from '@material-ui/core'
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { Delete, Archive } from '@material-ui/icons'
 import { boardPageStyles } from '../../styles/styles'
-import AlertBox from '../AlertBox'
-import { BOARD_ID_BY_COLUMN_ID } from '../../graphql/fragments'
-import { useApolloClient } from '@apollo/client'
+import AlertBox from '../utils/AlertBox'
 
-const DropdownSubtask = ({ columnId, subtaskId }) => {
+const DropdownSubtask = ({ subtask, column, boardId }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const classes = boardPageStyles()
     const [alertDialogStatus, setAlertDialogStatus] = useState(false)
     const [action, setAction] = useState(null)
-    const client = useApolloClient()
-    const columnIdForCache = `Column:${columnId}`
-
-    const columnData = client.readFragment({
-        id: columnIdForCache,
-        fragment: BOARD_ID_BY_COLUMN_ID
-    })
-    const boardId = columnData.board.id
-    const toggleAlertDialog = () => setAlertDialogStatus(!alertDialogStatus)
-
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget)
-    }
 
     const openAlertDialog = (order) => {
         setAction(order)
@@ -34,8 +19,14 @@ const DropdownSubtask = ({ columnId, subtaskId }) => {
         setAnchorEl(null)
     }
 
+    const toggleAlertDialog = () => setAlertDialogStatus(!alertDialogStatus)
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget)
+    }
+
     return (
-        <Grid item container direction='row' justify='flex-end' alignItems='center' >
+        <Grid item container direction="row" justify="flex-end" alignItems="center">
             <Button
                 aria-owns={anchorEl ? 'simple-menu' : undefined}
                 aria-haspopup="true"
@@ -71,8 +62,8 @@ const DropdownSubtask = ({ columnId, subtaskId }) => {
                 alertDialogStatus={alertDialogStatus}
                 toggleAlertDialog={toggleAlertDialog}
                 action={action}
-                subtaskId={subtaskId}
-                columnId={columnId}
+                subtask={subtask}
+                column={column}
                 boardId={boardId}
             />
         </Grid>

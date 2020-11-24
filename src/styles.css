@@ -22,6 +22,10 @@ html, body {
     width: 100%;
 }
 
+.board_button {
+    text-decoration: none;
+}
+
 #alertMessage {
     font-size: 1rem;
 }

@@ -3,11 +3,13 @@ import { Grid, TextField, Button } from '@material-ui/core'
 import Column from './Column'
 import { boardPageStyles } from '../../styles/styles'
 import useAddColumn from '../../graphql/column/hooks/useAddColumn'
+import { useSnackbarContext } from '../../contexts/SnackbarContext'
 
 const ColumnList = ({ columns, columnOrder, boardId }) => {
     const classes = boardPageStyles()
     const [columnName, setColumnName] = useState('')
     const [addColumn] = useAddColumn()
+    const { setSnackbarMessage } = useSnackbarContext()
 
     const handleChange = (event) => {
         setColumnName(event.target.value)
@@ -24,6 +26,7 @@ const ColumnList = ({ columns, columnOrder, boardId }) => {
             },
         })
         setColumnName('')
+        setSnackbarMessage('New column created')
     }
 
     const newColumnOrder = columnOrder.map((id) => columns.find((column) => column.id === id))

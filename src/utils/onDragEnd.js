@@ -13,7 +13,7 @@ export const onDragEnd = async (
     client,
     columns,
     board,
-    enqueueSnackbar,
+    setSnackbarMessage,
 ) => {
     const { destination, source, draggableId } = result
     if (!destination) return
@@ -43,8 +43,8 @@ export const onDragEnd = async (
                 boardId: board.id,
             },
         })
-        let msg = 'Moved Column ' + colName
-        enqueueSnackbar(msg)
+        let msg = `Moved column ${colName}`
+        setSnackbarMessage(msg)
         return
     }
 
@@ -58,16 +58,17 @@ export const onDragEnd = async (
         newTicketOrder.splice(destination.index, 0, movedTicket[0])
 
         let msg = null
-        let ticketName = null
+        let ticketPrettyId = null
         if (movedTicket[0]?.type === 'task') {
-            ticketName = column.tasks.filter((t) => t.id === movedTicket[0]?.ticketId)
-                .map((f) => f.title)
-            msg = 'Moved Task ' + ticketName
+            ticketPrettyId = column.tasks.filter((t) => t.id === movedTicket[0]?.ticketId)
+                .map((f) => f.prettyId)
+            msg = `Task ${ticketPrettyId} moved in ${column.name}`
         }
         if (movedTicket[0]?.type === 'subtask') {
             let stask = column.subtasks.map((s) => s.task)
-            ticketName = stask[0]?.title
-            msg = 'Moved Subtask of ' + ticketName
+            ticketPrettyId = stask[0]?.prettyId
+            const subtask = column.subtasks.find((s) => s.id === movedTicket[0]?.ticketId)
+            msg = `Subtask ${subtask.prettyId} moved in ${column.name}`
         }
 
         // Handle cache updates
@@ -82,7 +83,7 @@ export const onDragEnd = async (
             },
         })
         
-        enqueueSnackbar(msg)
+        setSnackbarMessage(msg)
     }
 
     // When ticket is moved into another column
@@ -163,11 +164,11 @@ export const onDragEnd = async (
         })
         let ticketTitle = null
         if (ticketBeingMoved.['__typename'] === 'Subtask') {
-            ticketTitle = 'Moved Subtask of ' + ticketBeingMoved.task.title
+            ticketTitle = `Subtask ${ticketBeingMoved.prettyId} moved to ${destinationColumn.name}`
         }
         if (ticketBeingMoved.['__typename'] === 'Task') {
-            ticketTitle = 'Moved Task ' + ticketBeingMoved.title
+            ticketTitle = `Task ${ticketBeingMoved.prettyId} moved to ${destinationColumn.name}`
         }
-        enqueueSnackbar(ticketTitle)
+        setSnackbarMessage(ticketTitle)
     }
 }

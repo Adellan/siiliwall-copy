@@ -1,6 +1,6 @@
 import React from 'react'
 import { Grid } from '@material-ui/core'
-import { boardPageStyles } from '../styles/styles'
+import { boardPageStyles } from '../../styles/styles'
 
 const MemberCircle = ({ name }) => {
     const classes = boardPageStyles()

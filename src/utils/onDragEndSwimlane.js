@@ -5,7 +5,7 @@ import { BOARD_BY_ID } from '../graphql/board/boardQueries'
 import { SWIMLANE_ORDER } from '../graphql/fragments'
 import { cacheTicketMovedInColumn, cacheTicketMovedFromColumn, updateSwimlaneOrderOfBoardToTheCache } from '../cacheService/cacheUpdates'
 
-export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, tasksInOrder, boardId) => {
+export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, tasksInOrder, boardId, setSnackbarMessage) => {
     const { destination, source, draggableId } = result
     if (!destination) return
 
@@ -76,7 +76,8 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
                 eventId,
             },
         })
-
+        const msg = `Moved swimlane ${movedTask.prettyId}`
+        setSnackbarMessage(msg)
         return
     }
 
@@ -101,6 +102,7 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
         const newTicketOrder = Array.from(column.ticketOrder.map((obj) => ({ ticketId: obj.ticketId, type: obj.type })))
         const [movedTicketOrderObject] = newTicketOrder.splice(source.index, 1)
         newTicketOrder.splice(destination.index, 0, movedTicketOrderObject)
+        const subtask = column.subtasks.find((sub) => sub.id === movedTicketOrderObject.ticketId)
 
         // Handle cache updates
         cacheTicketMovedInColumn(column.id, newTicketOrder)
@@ -113,6 +115,8 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
                 boardId,
             },
         })
+        const msg = `Subtask ${subtask.prettyId} moved in ${column.name}`
+        setSnackbarMessage(msg)
         return
     }
 
@@ -177,5 +181,7 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
                 eventId,
             },
         })
+        const msg = `Subtask ${movedSubtask.prettyId} moved to ${destinationColumn.name}`
+        setSnackbarMessage(msg)
     }
 }

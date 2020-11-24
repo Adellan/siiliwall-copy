@@ -6,21 +6,22 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Delete from '@material-ui/icons/Delete'
 import { useApolloClient } from '@apollo/client'
 import { TICKETORDER } from '../../graphql/fragments'
-import AlertBox from '../AlertBox'
+import AlertBox from '../utils/AlertBox'
 import { boardPageStyles } from '../../styles/styles'
 
-const DropdownColumn = ({ columnId, boardId }) => {
+const DropdownColumn = ({ column, boardId }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const [action, setAction] = useState(null)
     const [alertDialogStatus, setAlertDialogStatus] = useState(false)
     const classes = boardPageStyles()
     const client = useApolloClient()
 
-    const { ticketOrder } = client.readFragment({
-        id: `Column:${columnId}`,
+    const data = client.readFragment({
+        id: `Column:${column.id}`,
         fragment: TICKETORDER,
     })
-    const hasTickets = ticketOrder.length
+    if (!data) return null
+    const hasTickets = data.ticketOrder.length
 
     const toggleAlertDialog = () => setAlertDialogStatus(!alertDialogStatus)
 
@@ -65,7 +66,7 @@ const DropdownColumn = ({ columnId, boardId }) => {
             <AlertBox
                 alertDialogStatus={alertDialogStatus}
                 toggleAlertDialog={toggleAlertDialog}
-                columnId={columnId}
+                column={column}
                 boardId={boardId}
                 action={action}
             />

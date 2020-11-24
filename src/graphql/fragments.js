@@ -137,7 +137,7 @@ export const SWIMLANE_ORDER_NUMBER = gql`
     }
 `
 export const BOARD_ID_BY_COLUMN_ID = gql`
-    fragment boarfIdByColumnId on Column {
+    fragment boardIdByColumnId on Column {
         board {
             id
         }

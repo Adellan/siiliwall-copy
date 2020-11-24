@@ -11,6 +11,9 @@ const NewBoardForm = ({ setOpen, open, projectId }) => {
     const [prettyId, setPrettyId] = useState('')
     const [valid, setValid] = useState(true)
     const eventId = window.localStorage.getItem('eventId')
+    const colors = [0, 1]
+    const randomizedColor = colors[Math.floor(Math.random() * colors.length)]
+
     const handleChangeName = (event) => {
         setName(event.target.value)
     }
@@ -49,7 +52,8 @@ const NewBoardForm = ({ setOpen, open, projectId }) => {
                     name,
                     prettyId,
                     eventId,
-                    projectId
+                    projectId,
+                    color: randomizedColor
                 },
             })
             closeDialog()
@@ -73,7 +77,7 @@ const NewBoardForm = ({ setOpen, open, projectId }) => {
                         type="text"
                         fullWidth
                         onChange={(event) => handleChangeName(event)}
-                        id="inputName"
+                        data-cy="nameInput"
                     />
                     {valid ?
                         <TextField
@@ -83,6 +87,7 @@ const NewBoardForm = ({ setOpen, open, projectId }) => {
                             label="Short Form"
                             type="text"
                             fullWidth
+                            data-cy="shortForm"
                             onChange={(event) => handleChangePrettyId(event)}
                             id="inputShortForm"
                             helperText="Has to be 2-5 characters long and letters must be capitalized"
@@ -104,7 +109,7 @@ const NewBoardForm = ({ setOpen, open, projectId }) => {
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button disabled={!name.length || !prettyId.length} onClick={handleSave} color="primary" id="addBoard">
+                    <Button disabled={!name.length || !prettyId.length} onClick={handleSave} color="primary" data-cy="addNewBoard">
                         Add
                     </Button>
                 </DialogActions>

@@ -24,14 +24,14 @@ apollo.installSubscriptionHandlers(app)
 server.listen({ port: config.PORT }, () => {
     console.log(`Server running on port ${config.PORT}`)
     // eslint-disable-next-line no-new
-    /* new SubscriptionServer({
+    new SubscriptionServer({
         execute,
         subscribe,
         schema,
     }, {
         server,
         path: '/graphql',
-    }) */
+    })
 })
 
 const closeHttpServer = () => {

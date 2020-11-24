@@ -11,6 +11,7 @@ import useMoveTicketInColumn from '../../graphql/ticket/hooks/useMoveTicketInCol
 import useMoveTicketFromColumn from '../../graphql/ticket/hooks/useMoveTicketFromColumn'
 import useMoveSwimlane from '../../graphql/task/hooks/useMoveSwimlane'
 import AddTaskDialog from '../task/AddTaskDialog'
+import { useSnackbarContext } from '../../contexts/SnackbarContext'
 import { swimlaneStyles } from '../../styles/styles'
 
 const SwimlaneView = ({ board }) => {
@@ -25,6 +26,7 @@ const SwimlaneView = ({ board }) => {
     const [dialogStatus, setDialogStatus] = useState(false)
     const toggleDialog = () => setDialogStatus(!dialogStatus)
     const client = useApolloClient()
+    const { setSnackbarMessage } = useSnackbarContext()
     const classes = swimlaneStyles()
 
     const { columns, swimlaneOrder } = board
@@ -77,7 +79,7 @@ const SwimlaneView = ({ board }) => {
     }
 
     return (
-        <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, tasksInOrder, board.id)}>
+        <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, tasksInOrder, board.id, setSnackbarMessage)}>
             <Grid container direction="column" spacing={2} classes={{ root: classes.swimlaneView }}>
                 <Grid item container direction="row">
                     <Grid item classes={{ root: classes.swimlaneAddButtonGrid }}>

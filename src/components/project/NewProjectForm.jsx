@@ -45,14 +45,14 @@ const NewProjectForm = ({ open, setOpen }) => {
                         type="text"
                         fullWidth
                         onChange={(event) => handleChangeName(event)}
-                        id="inputName"
+                        data-cy="inputName"
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">
+                    <Button onClick={handleClose} color="primary" data-cy="cancel">
                         Cancel
                     </Button>
-                    <Button disabled={!name.length} onClick={handleSave} color="primary" id="addProject">
+                    <Button disabled={!name.length} onClick={handleSave} color="primary" data-cy="addProject">
                         Add
                     </Button>
                 </DialogActions>

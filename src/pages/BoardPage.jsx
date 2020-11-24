@@ -8,7 +8,7 @@ import { boardPageStyles } from '../styles/styles'
 import useBoardById from '../graphql/board/hooks/useBoardById'
 import useBoardSubscriptions from '../graphql/subscriptions/useBoardSubscriptions'
 import { client } from '../apollo'
-import Header from '../components/Header'
+import Header from '../components/utils/Header'
 
 const BoardPage = ({ id, eventId }) => {
     useEffect(() => () => {
@@ -22,8 +22,8 @@ const BoardPage = ({ id, eventId }) => {
     if (queryResult.loading) return null
     const board = queryResult.data.boardById
 
-    const switchView = () => {
-        toggleView(view === 'kanban' ? 'swimlane' : 'kanban')
+    const switchView = (viewParam) => {
+        toggleView(viewParam)
     }
 
     return (
@@ -33,7 +33,7 @@ const BoardPage = ({ id, eventId }) => {
             classes={{ root: classes.root }}
             id="boardElement"
         >
-            <Header boardName={board.name} boardPrettyId={board.prettyId} switchView={switchView} />
+            <Header boardName={board.name} boardPrettyId={board.prettyId} switchView={switchView} view={view} />
             <Grid item>
                 {view === 'kanban' ? <Board board={board} /> : <SwimlaneView board={board} />}
             </Grid>

@@ -3,16 +3,16 @@ const projects = [{
     id: '9da1b35f-181a-4397-a5a5-47abced10a66', name: 'SiiliWall', orderNumber: 1,
 }]
 const boards = [{
-    id: '83fa4f89-8ea1-4d1c-9fee-321daa941485', prettyId: 'PO', name: 'PO:n taulu', creatorId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576', orderNumber: 2, ticketCount: 2, projectId: '9da1b35f-181a-4397-a5a5-47abced10a66'
+    id: '83fa4f89-8ea1-4d1c-9fee-321daa941485', prettyId: 'PO', name: 'PO:n taulu', creatorId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576', orderNumber: 2, ticketCount: 2, projectId: '9da1b35f-181a-4397-a5a5-47abced10a66', color: 0
 },
 {
-    id: 'd3553f65-7ed4-4f43-9847-c14e4539eb5e', prettyId: 'DEV', name: 'Devaajan taulu', creatorId: '654df13f-51be-4b25-8f0e-7c2f40a3a81e', orderNumber: 3, ticketCount: 2, projectId: '9da1b35f-181a-4397-a5a5-47abced10a66'
+    id: 'd3553f65-7ed4-4f43-9847-c14e4539eb5e', prettyId: 'DEV', name: 'Devaajan taulu', creatorId: '654df13f-51be-4b25-8f0e-7c2f40a3a81e', orderNumber: 3, ticketCount: 2, projectId: '9da1b35f-181a-4397-a5a5-47abced10a66', color: 1
 },
 {
-    id: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83', prettyId: 'KNBN', name: 'Kanban', creatorId: '8b251e01-0bec-41bf-b756-ba53c76d04e6', orderNumber: 1, ticketCount: 10, projectId: '9da1b35f-181a-4397-a5a5-47abced10a66'
+    id: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83', prettyId: 'KNBN', name: 'Kanban', creatorId: '8b251e01-0bec-41bf-b756-ba53c76d04e6', orderNumber: 1, ticketCount: 10, projectId: '9da1b35f-181a-4397-a5a5-47abced10a66', color: 0
 },
 {
-    id: '0f154e01-f8ba-49c8-b2dc-e884d28e7f83', prettyId: 'STR', name: 'StoryBoard', creatorId: '8b251e01-0bec-41bf-b756-ba53c76d04e6', orderNumber: 4, ticketCount: 0, projectId: '9da1b35f-181a-4397-a5a5-47abced10a66'
+    id: '0f154e01-f8ba-49c8-b2dc-e884d28e7f83', prettyId: 'STR', name: 'StoryBoard', creatorId: '8b251e01-0bec-41bf-b756-ba53c76d04e6', orderNumber: 4, ticketCount: 0, projectId: '9da1b35f-181a-4397-a5a5-47abced10a66', color: 0
 }]
 
 const users = [

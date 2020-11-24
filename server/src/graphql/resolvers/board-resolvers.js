@@ -33,9 +33,9 @@ const schema = {
 
     Mutation: {
         async addBoard(root, {
-            name, prettyId, eventId, projectId,
+            name, prettyId, color, eventId, projectId,
         }) {
-            const addedBoard = await dataSources.boardService.addBoard(name, prettyId, projectId)
+            const addedBoard = await dataSources.boardService.addBoard(name, prettyId, color, projectId)
             pubsub.publish(BOARD_ADDED, {
                 projectId,
                 eventId,

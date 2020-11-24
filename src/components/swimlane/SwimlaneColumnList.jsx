@@ -3,7 +3,7 @@ import { Grid } from '@material-ui/core'
 import { swimlaneStyles } from '../../styles/styles'
 import SwimlaneColumn from './SwimlaneColumn'
 
-const SwimlaneColumnList = ({ swimlaneColumns, taskId }) => {
+const SwimlaneColumnList = ({ swimlaneColumns, taskId, boardId, }) => {
     const classes = swimlaneStyles()
     const mostSubtasks = Math.max(...swimlaneColumns.map((swimlaneColumn) => swimlaneColumn.subtasks.length))
     return (
@@ -20,6 +20,7 @@ const SwimlaneColumnList = ({ swimlaneColumns, taskId }) => {
                         taskId={taskId}
                         isTheLeftMost={index === swimlaneColumns.length - 1}
                         mostSubtasks={mostSubtasks}
+                        boardId={boardId}
                     />
                 </Grid>
             ))}

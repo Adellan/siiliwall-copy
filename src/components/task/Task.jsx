@@ -5,17 +5,18 @@ import { Draggable } from 'react-beautiful-dnd'
 import { boardPageStyles } from '../../styles/styles'
 import DropdownTask from './DropdownTask'
 import TaskEditDialog from './EditTaskDialog'
-import ColorPill from '../ColorPill'
-import MemberCircle from '../MemberCircle'
+import ColorPill from '../utils/ColorPill'
+import MemberCircle from '../utils/MemberCircle'
 
 const Task = ({
-    task, index, columnId, boardId,
+    task, index, column, boardId,
 }) => {
     const classes = boardPageStyles()
-    const { title, members, owner, prettyId } = task
+    const {
+        title, members, owner, prettyId,
+    } = task
     const titleLimit = 25
     const dots = '...'
-
     let tasksOwnerAndMembers
     if (owner) {
         tasksOwnerAndMembers = members.concat(owner)
@@ -72,7 +73,7 @@ const Task = ({
                         <Grid item onClick={handleDialogClick}>
                             <DropdownTask
                                 task={task}
-                                columnId={columnId}
+                                column={column}
                                 boardId={boardId}
                             />
                         </Grid>
@@ -81,7 +82,7 @@ const Task = ({
                         <Grid item classes={{ root: classes.taskName }}>
                             <p>{add3Dots(task.title)}</p>
                         </Grid>
-                        <Grid item container direction='row' spacing={1} classes={{ root: classes.ticketColorPillsGrid }}>
+                        <Grid item container direction="row" spacing={1} classes={{ root: classes.ticketColorPillsGrid }}>
                             {task.colors ? (
                                 task.colors.map((colorObj) => (
                                     <Grid item key={colorObj.id}><ColorPill color={colorObj.color} /></Grid>
@@ -89,12 +90,12 @@ const Task = ({
                             ) : null}
                         </Grid>
                     </Grid>
-                    <Grid item >
+                    <Grid item>
                         {tasksOwnerAndMembers.length ? (
                             <Divider classes={{ root: classes.ticketDivider }} />
                         ) : null}
                     </Grid>
-                    <Grid item container direction='row' justify='flex-end'>
+                    <Grid item container direction="row" justify="flex-end">
                         {tasksOwnerAndMembers.length ? (
                             tasksOwnerAndMembers.map((personObj) => (
                                 <Grid item key={personObj.id}><MemberCircle name={personObj.userName} /></Grid>
@@ -107,9 +108,9 @@ const Task = ({
                         editId={task.id}
                         task={task}
                     />
-                </Grid >
+                </Grid>
             )}
-        </Draggable >
+        </Draggable>
     )
 }
 export default Task

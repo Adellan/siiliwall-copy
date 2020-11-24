@@ -3,11 +3,13 @@ import EditText from 'react-editext'
 import { Grid } from '@material-ui/core'
 import useEditColumn from '../../graphql/column/hooks/useEditColumn'
 import { boardPageStyles } from '../../styles/styles'
+import { useSnackbarContext } from '../../contexts/SnackbarContext'
 
 const RenameColumn = ({ editId, column }) => {
     const [editColumn] = useEditColumn()
     const [name, setName] = useState(column?.name)
     const classes = boardPageStyles()
+    const { setSnackbarMessage } = useSnackbarContext()
     const nameLimit = 19
     const dots = '...'
 
@@ -30,9 +32,10 @@ const RenameColumn = ({ editId, column }) => {
                 columnId: editId,
                 columnName: newName,
                 boardId: column.board.id,
-                eventId
+                eventId,
             },
         })
+        setSnackbarMessage(`Renamed column ${column.name}`)
     }
 
     return (

@@ -18,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+        color: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        }
     })
     Board.associate = (models) => {
         Board.hasMany(models.Column, {

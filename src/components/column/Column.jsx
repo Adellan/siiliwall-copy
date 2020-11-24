@@ -5,7 +5,7 @@ import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { Grid, Button } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 import { boardPageStyles } from '../../styles/styles'
-import TicketList from '../TicketList'
+import TicketList from './TicketList'
 import DropdownColumn from './DropdownColumn'
 import AddTaskDialog from '../task/AddTaskDialog'
 import RenameColumn from './RenameColumn'
@@ -41,7 +41,7 @@ const Column = ({ column, index }) => {
                                 </Button>
                             </Grid>
                             <Grid item>
-                                <DropdownColumn columnId={column.id} boardId={column.board.id} />
+                                <DropdownColumn column={column} boardId={column.board.id} />
                             </Grid>
                         </Grid>
                     </Grid>
@@ -59,7 +59,7 @@ const Column = ({ column, index }) => {
                                     tasks={tasks}
                                     subtasks={subtasks}
                                     ticketOrder={ticketOrder}
-                                    columnId={column.id}
+                                    column={column}
                                     boardId={board.id}
                                 />
                                 {provided.placeholder}

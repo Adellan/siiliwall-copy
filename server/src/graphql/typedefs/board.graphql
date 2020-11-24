@@ -7,6 +7,7 @@ type Board {
   columnOrder: [ID!]!
   swimlaneOrder: [ID!]!
   ticketCount: Int
+  color: Int!
 }
 
 type Query {
@@ -25,7 +26,7 @@ type SwimlaneOrderObject {
 }
 
 type Mutation {
-  addBoard(name: String!, prettyId: String!, eventId: ID!, projectId: ID!): Board!
+  addBoard(name: String!, prettyId: String!, color: Int!, eventId: ID!, projectId: ID!): Board!
   moveSwimlane(boardId: ID!, affectedSwimlanes: [newSwimlaneOrderInput]!, swimlaneOrder: [ID!]!, eventId: ID!): ID
 }
 

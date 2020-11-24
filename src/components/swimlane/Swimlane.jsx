@@ -49,7 +49,7 @@ const Swimlane = ({
                     <SwimlaneHeaderRow
                         task={task}
                         boardId={boardId}
-                        columnId={task?.column?.id}
+                        column={task?.column}
                         prettyId={task.prettyId}
                         title={task.title}
                         numberOfSubtasks={numberOfSubtasks}
@@ -61,7 +61,7 @@ const Swimlane = ({
                         && (
                             <Grid item classes={{ root: classes.test }}>
                                 <Divider />
-                                <SwimlaneColumnList swimlaneColumns={task.swimlaneColumns} taskId={task.id} />
+                                <SwimlaneColumnList swimlaneColumns={task.swimlaneColumns} taskId={task.id} boardId={boardId} />
                             </Grid>
                         )}
                     <TaskEditDialog

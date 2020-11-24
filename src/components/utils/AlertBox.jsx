@@ -5,22 +5,23 @@ import {
 } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert'
 import { useMutation, useApolloClient } from '@apollo/client'
-import { boardPageStyles } from '../styles/styles'
-import { DELETE_COLUMN } from '../graphql/column/columnQueries'
-import { COLUMNORDER_AND_COLUMNS } from '../graphql/fragments'
-import { DELETE_TASK } from '../graphql/task/taskQueries'
-import useArchiveTask from '../graphql/task/hooks/useArchiveTask'
-import useArchiveSubtask from '../graphql/subtask/hooks/useArchiveSubtask'
-import useDeleteSubtask from '../graphql/subtask/hooks/useDeleteSubtask'
-import { removeTaskFromCache, deleteColumnFromCache, removeSubtaskFromCache } from '../cacheService/cacheUpdates'
+import { boardPageStyles } from '../../styles/styles'
+import { DELETE_COLUMN } from '../../graphql/column/columnQueries'
+import { COLUMNORDER_AND_COLUMNS } from '../../graphql/fragments'
+import { DELETE_TASK } from '../../graphql/task/taskQueries'
+import useArchiveTask from '../../graphql/task/hooks/useArchiveTask'
+import useArchiveSubtask from '../../graphql/subtask/hooks/useArchiveSubtask'
+import useDeleteSubtask from '../../graphql/subtask/hooks/useDeleteSubtask'
+import { removeTaskFromCache, deleteColumnFromCache, removeSubtaskFromCache } from '../../cacheService/cacheUpdates'
+import { useSnackbarContext } from '../../contexts/SnackbarContext'
 
 const AlertBox = ({
-    alertDialogStatus, toggleAlertDialog, action, columnId, boardId, taskId, subtaskId, count,
+    alertDialogStatus, toggleAlertDialog, action, column, boardId, task, subtask, count,
 }) => {
     const [check, toggleCheck] = useState(false)
     const [archiveTask] = useArchiveTask()
-    const [archiveSubtask] = useArchiveSubtask(columnId)
-    const [callDeleteSubtask] = useDeleteSubtask(columnId)
+    const [archiveSubtask] = useArchiveSubtask(column)
+    const [callDeleteSubtask] = useDeleteSubtask(column)
     const classes = boardPageStyles()
     const client = useApolloClient()
     const [callDeleteColumn] = useMutation(DELETE_COLUMN)
@@ -33,6 +34,7 @@ const AlertBox = ({
     const alertMsgDeleteTaskIfSubtasks = `This task has ${count} unfinished subtask${count > 1 ? 's' : ''} on the board! Deletion of the task will permanently remove all the subtasks as well!`
     const alertMsgArchiveTaskIfSubtasks = `This task has ${count} unfinished subtask${count > 1 ? 's' : ''} on the board! Archiving of the task will also archive it's subtasks, but can be examined through the archive setting.`
     const alertMsgColumnHasTickets = 'This column has tickets, you must empty the column before deleting it.'
+    const { setSnackbarMessage } = useSnackbarContext()
 
     const eventId = window.localStorage.getItem('eventId')
 
@@ -80,42 +82,7 @@ const AlertBox = ({
         toggleCheck(!check)
     }
 
-    const archiveTaskById = () => {
-        // Find the related subtasks and archive them
-        const boardIdForCache = `Board:${boardId}`
-        const columnData = client.readFragment({
-            id: boardIdForCache,
-            fragment: COLUMNORDER_AND_COLUMNS,
-        })
-        // Handle cache
-
-        const columnsSubtasks = columnData.columns.map((column) => column.subtasks).flat()
-        const subtasksToBeDeleted = columnsSubtasks.filter((subtask) => subtask.task.id === taskId)
-        subtasksToBeDeleted.map((subtask) => archiveSubtaskById(subtask.id, subtask.column.id))
-        removeTaskFromCache(taskId, columnId, boardId)
-        // Send mutaion to the server
-        archiveTask({
-            variables: {
-                taskId,
-                columnId,
-                boardId,
-                eventId,
-            },
-        })
-    }
-
-    const deleteColumn = () => {
-        deleteColumnFromCache(columnId, boardId)
-        callDeleteColumn({
-            variables: {
-                columnId,
-                boardId,
-                eventId,
-            },
-        })
-    }
-
-    const archiveSubtaskById = (subtaskId, columnId) => {
+    const archiveSubtaskById = (subtaskId, columnId, subtaskPrettyId) => {
         removeSubtaskFromCache(subtaskId, columnId)
         archiveSubtask({
             variables: {
@@ -125,9 +92,46 @@ const AlertBox = ({
                 eventId,
             },
         })
+        setSnackbarMessage(`Subtask ${subtaskPrettyId} archived`)
     }
 
-    const deleteSubtask = (subtaskId, columnId) => {
+    const archiveTaskById = () => {
+        // Find the related subtasks and archive them
+        const boardIdForCache = `Board:${boardId}`
+        const columnData = client.readFragment({
+            id: boardIdForCache,
+            fragment: COLUMNORDER_AND_COLUMNS,
+        })
+        // Handle cache
+        const columnsSubtasks = columnData.columns.map((column) => column.subtasks).flat()
+        const subtasksToBeDeleted = columnsSubtasks.filter((subtask) => subtask.task.id === task.id)
+        subtasksToBeDeleted.map((subtask) => archiveSubtaskById(subtask.id, subtask.column.id, subtask.prettyId))
+        removeTaskFromCache(task.id, column.id, boardId)
+        // Send mutaion to the server
+        archiveTask({
+            variables: {
+                taskId: task.id,
+                columnId: column.id,
+                boardId,
+                eventId,
+            },
+        })
+        setSnackbarMessage(`Task ${task.prettyId} archived`)
+    }
+
+    const deleteColumn = () => {
+        deleteColumnFromCache(column.id, boardId)
+        callDeleteColumn({
+            variables: {
+                columnId: column.id,
+                boardId,
+                eventId,
+            },
+        })
+        setSnackbarMessage(`Column ${column.name} deleted`)
+    }
+
+    const deleteSubtask = (subtaskId, columnId, subtaskPrettyId) => {
         removeSubtaskFromCache(subtaskId, columnId)
         callDeleteSubtask({
             variables: {
@@ -137,6 +141,7 @@ const AlertBox = ({
                 eventId,
             },
         })
+        setSnackbarMessage(`Subtask ${subtaskPrettyId} deleted`)
     }
 
     const deleteTask = () => {
@@ -148,19 +153,20 @@ const AlertBox = ({
         })
         // Handle the removing of task's subtasks if they exist
         const allSubtasks = columnData.columns.map((column) => column.subtasks).flat()
-        const subtasksToBeDeleted = allSubtasks.filter((subtask) => subtask.task.id === taskId)
-        subtasksToBeDeleted.map((subtask) => deleteSubtask(subtask.id, subtask.column.id))
+        const subtasksToBeDeleted = allSubtasks.filter((subtask) => subtask.task.id === task.id)
+        subtasksToBeDeleted.map((subtask) => deleteSubtask(subtask.id, subtask.column.id, subtask.prettyId))
         // Remove task from cache
-        removeTaskFromCache(taskId, columnId, boardId)
+        removeTaskFromCache(task.id, column.id, boardId)
         // Send mutation
         callDeleteTask({
             variables: {
-                taskId,
-                columnId,
+                taskId: task.id,
+                columnId: column.id,
                 boardId,
                 eventId,
             },
         })
+        setSnackbarMessage(`Task ${task.prettyId} deleted`)
     }
 
     const handleDelete = () => {
@@ -171,7 +177,7 @@ const AlertBox = ({
             deleteColumn()
         }
         if (action === 'DELETE_SUBTASK') {
-            deleteSubtask(subtaskId, columnId)
+            deleteSubtask(subtask.id, column.id, subtask.prettyId)
         }
     }
 
@@ -184,7 +190,7 @@ const AlertBox = ({
             archiveTaskById()
         }
         if (action === 'ARCHIVE_SUBTASK') {
-            archiveSubtaskById(subtaskId, columnId)
+            archiveSubtaskById(subtask.id, column.id)
         }
     }
 
