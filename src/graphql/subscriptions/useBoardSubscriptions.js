@@ -13,7 +13,6 @@ import {
     deleteColumnFromCache,
     updateSwimlaneOrderOfBoardToTheCache,
     addNewColumn,
-    cacheColumnMoved,
 } from '../../cacheService/cacheUpdates'
 
 const useBoardSubscriptions = (id, eventId) => {
@@ -36,17 +35,13 @@ const useBoardSubscriptions = (id, eventId) => {
                 }
             },
         })
-    useSubscription(COLUMN_MOVED,
+    /* useSubscription(COLUMN_MOVED,
         {
             variables: { boardId: id, eventId },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
                 console.log('dataa ', data)
-                /* const {
-                    boardId, newColumnOrder,
-                } = data.columnMoved
-                cacheColumnMoved(boardId, newColumnOrder) */
             },
-        })
+        }) */
     useSubscription(SUBTASK_REMOVED,
         {
             variables: { boardId: id, eventId },

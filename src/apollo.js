@@ -43,8 +43,8 @@ export const client = new ApolloClient({
                         merge(existing, incoming = []) {
                             return [...incoming]
                         },
-                    }
-                }
+                    },
+                },
             },
             Board: {
                 fields: {

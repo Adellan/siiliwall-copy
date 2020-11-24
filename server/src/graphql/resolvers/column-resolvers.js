@@ -42,12 +42,12 @@ const schema = {
                 (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId),
             ),
         },
-        columnMoved: {
+        /* columnMoved: {
             subscribe: withFilter(
                 () => pubsub.asyncIterator(COLUMN_MOVED),
                 (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId),
             ),
-        },
+        }, */
     },
 
     Mutation: {
@@ -142,6 +142,16 @@ const schema = {
         },
         async moveColumn(root, { boardId, newColumnOrder }) {
             await dataSources.boardService.reOrderColumns(newColumnOrder)
+            /* pubsub.publish(COLUMN_MOVED, {
+                boardId,
+                eventId,
+                newColumnOrder,
+                columnMoved: {
+                    boardId,
+                    newColumnOrder,
+                    eventId,
+                },
+            }) */
             return boardId
         },
     },
