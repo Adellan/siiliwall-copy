@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {
-    Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
+    Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid, Divider,
 } from '@material-ui/core'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { Delete, Archive } from '@material-ui/icons'
@@ -36,7 +36,7 @@ const DropdownSubtask = ({ subtask, column, boardId }) => {
                 <MoreVertIcon classes={{ root: classes.subtaskButtonIcons }} />
             </Button>
             <Menu
-                id="simple-menu"
+                classes={{ paper: classes.subtaskDropdown }}
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={() => setAnchorEl(null)}
@@ -51,6 +51,7 @@ const DropdownSubtask = ({ subtask, column, boardId }) => {
                     </ListItemIcon>
                     <ListItemText primary="Archive" />
                 </MenuItem>
+                <Divider />
                 <MenuItem onClick={() => openAlertDialog('DELETE_SUBTASK')}>
                     <ListItemIcon>
                         <Delete />

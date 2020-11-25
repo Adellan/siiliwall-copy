@@ -51,12 +51,13 @@ export const headerStyles = makeStyles({
     toggleKanbanButton: {
         height: 35,
         width: 35,
+        cursor: 'pointer',
     },
 
     toggleSwimlaneButton: {
         height: 35,
         width: 35,
-
+        cursor: 'pointer',
     },
 
     toggleViewButtonIcon: {
@@ -76,7 +77,7 @@ export const projectPageStyles = makeStyles({
     projectPageMainGrid: {
         paddingTop: 20,
         paddingLeft: 30,
-        paddingRight: 30
+        paddingRight: 30,
     },
 
     projectPageTitles: {
@@ -85,15 +86,15 @@ export const projectPageStyles = makeStyles({
     },
 
     projectPageLeftGrid: {
-        width: '60%'
+        width: '60%',
     },
 
     projectPageBoardsGrid: {
-        marginBottom: 35
+        marginBottom: 35,
     },
 
     projectPageBoardCardGrid: {
-        marginTop: 10
+        marginTop: 10,
     },
 
     boardCard: {
@@ -104,11 +105,11 @@ export const projectPageStyles = makeStyles({
     },
 
     boardCardRowGrid: {
-        height: '100%'
+        height: '100%',
     },
 
     boardCardColumnGrid: {
-        width: 125
+        width: 125,
     },
 
     boardCardBlob1: {
@@ -125,7 +126,7 @@ export const projectPageStyles = makeStyles({
         fontSize: 15,
         marginTop: 10,
         paddingLeft: 10,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
 
     boardCardTasks: {
@@ -133,18 +134,18 @@ export const projectPageStyles = makeStyles({
         fontSize: 12,
         color: colours.gray,
         paddingLeft: 10,
-        marginBottom: 7
+        marginBottom: 7,
     },
 
     addBoardButton: {
         width: 250,
         height: 80,
         border: `dashed ${colours.lightgrey} 2px`,
-        color: colours.gray
+        color: colours.gray,
     },
 
     projectPageRightGrid: {
-        width: '40%'
+        width: '40%',
     },
 
     title: {
@@ -264,6 +265,12 @@ export const boardPageStyles = makeStyles({
         minWidth: 30,
     },
 
+    taskDropdown: {
+        width: 310,
+        maxHeight: 245,
+        borderRadius: 0,
+    },
+
     taskHeader: {
         background: colours.black,
         flexWrap: 'nowrap',
@@ -332,6 +339,12 @@ export const boardPageStyles = makeStyles({
     subtaskDropdownGrid: {
         height: 30,
         minWidth: 30,
+    },
+
+    subtaskDropdown: {
+        width: 250,
+        maxHeight: 245,
+        borderRadius: 0,
     },
 
     subtaskPrettyId: {

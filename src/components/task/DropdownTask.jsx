@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
 import {
-    Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid, IconButton,
+    Menu, MenuItem, Button, ListItemText, ListItemIcon, Grid, IconButton, Divider,
 } from '@material-ui/core'
-import MoreVertIcon from '@material-ui/icons/MoreVert'
 import {
-    Delete, Archive, Add,
+    Delete, Archive, Add, Edit,
 } from '@material-ui/icons'
+
+import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { useApolloClient } from '@apollo/client'
 import AlertBox from '../utils/AlertBox'
 import AddSubtaskDialog from '../subtask/AddSubtaskDialog'
+import TaskEditDialog from './EditTaskDialog'
 import { boardPageStyles } from '../../styles/styles'
 import { COLUMNORDER_AND_COLUMNS } from '../../graphql/fragments'
 
@@ -20,8 +22,15 @@ const DropdownTask = ({
     const [count, setCount] = useState(null)
     const [alertDialogStatus, setAlertDialogStatus] = useState(false)
     const [addDialogStatus, setAddDialogStatus] = useState(false)
+    const [editDialogStatus, setEditDialogStatus] = useState(false)
     const classes = boardPageStyles()
     const client = useApolloClient()
+
+    const toggleEditDialog = () => {
+        setAnchorEl(null)
+        setEditDialogStatus(!editDialogStatus)
+    }
+
     const toggleAddDialog = (e) => {
         e.stopPropagation()
         setAnchorEl(null)
@@ -86,7 +95,7 @@ const DropdownTask = ({
             </Grid>
 
             <Menu
-                id="simple-menu"
+                classes={{ paper: classes.taskDropdown }}
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={() => setAnchorEl(null)}
@@ -95,25 +104,40 @@ const DropdownTask = ({
                 getContentAnchorEl={null}
                 elevation={0}
             >
+                <MenuItem onClick={() => toggleEditDialog()}>
+                    <ListItemIcon>
+                        <Edit />
+                    </ListItemIcon>
+                    <ListItemText primary="Edit task" />
+                </MenuItem>
+                <Divider />
                 <MenuItem onClick={(e) => toggleAddDialog(e)}>
                     <ListItemIcon>
                         <Add />
                     </ListItemIcon>
-                    <ListItemText primary="Create subtask" />
+                    <ListItemText primary="Add subtask" />
                 </MenuItem>
+                <Divider />
                 <MenuItem onClick={() => openAlertDialog('ARCHIVE_TASK')}>
                     <ListItemIcon>
                         <Archive />
                     </ListItemIcon>
-                    <ListItemText primary="Archive" />
+                    <ListItemText primary="Archive task" />
                 </MenuItem>
+                <Divider />
                 <MenuItem onClick={() => openAlertDialog('DELETE_TASK')}>
                     <ListItemIcon>
                         <Delete />
                     </ListItemIcon>
-                    <ListItemText primary="Remove" />
+                    <ListItemText primary="Remove task" />
                 </MenuItem>
             </Menu>
+            <TaskEditDialog
+                dialogStatus={editDialogStatus}
+                toggleDialog={toggleEditDialog}
+                editId={task.id}
+                task={task}
+            />
             <AlertBox
                 alertDialogStatus={alertDialogStatus}
                 toggleAlertDialog={toggleAlertDialog}
