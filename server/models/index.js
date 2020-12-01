@@ -3,7 +3,7 @@
 const fs = require('fs')
 const path = require('path')
 const Sequelize = require('sequelize')
-const dummyData = require('../server/dummyData')
+const dummyData = require('../dummyData')
 
 const basename = path.basename(__filename)
 const env = process.env.NODE_ENV || 'development'
