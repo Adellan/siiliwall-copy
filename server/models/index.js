@@ -35,6 +35,7 @@ db.sequelize = sequelize
 db.Sequelize = Sequelize
 
 const initializeDb = async () => {
+    // we skip usage sync if in production
     const useSync = env !== 'production'
     try {
     if (useSync) {
