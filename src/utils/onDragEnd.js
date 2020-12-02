@@ -1,8 +1,5 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable import/prefer-default-export */
-import {
-    COLUMNORDER,
-} from '../graphql/fragments'
 import { cacheTicketMovedInColumn, cacheTicketMovedFromColumn, cacheColumnMoved } from '../cacheService/cacheUpdates'
 
 export const onDragEnd = async (
@@ -10,7 +7,6 @@ export const onDragEnd = async (
     moveTicketInColumn,
     moveTicketFromColumn,
     moveColumn,
-    client,
     columns,
     board,
     setSnackbarMessage,
