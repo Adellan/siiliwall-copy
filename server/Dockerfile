@@ -1,5 +1,4 @@
 FROM node:12
-
 # Create app directory
 WORKDIR /usr/src/app
 
@@ -16,4 +15,4 @@ RUN npm ci --only=production
 COPY . .
 
 EXPOSE 4001
-CMD [ "npm", "run", "start" ]
+CMD [ "./docker_entry_script.sh" ]
