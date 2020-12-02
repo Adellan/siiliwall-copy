@@ -35,6 +35,7 @@ const EditSubtaskDialog = ({
         setOwner(subtask.owner ? subtask.owner.id : null)
         setMembers(subtask.members.length > 0 ? arrayOfOldMemberIds : [])
         setColors(subtask.colors.length > 0 ? arrayOfOldColorIds : [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [subtask])
 
     if (userQuery.loading || colorQuery.loading) return null
@@ -77,7 +78,7 @@ const EditSubtaskDialog = ({
                 newMemberIds: members,
                 oldColorIds: arrayOfOldColorIds,
                 newColorIds: colors,
-                eventId
+                eventId,
             },
         })
         toggleDialog()
@@ -113,11 +114,17 @@ const EditSubtaskDialog = ({
     })
 
     const modifiedColorData = colorQuery.data.allColors.map((color) => {
-        const newObject = { value: color.id, label: color.color.charAt(0).toUpperCase() + color.color.slice(1) }
+        const newObject = {
+            value: color.id,
+            label: color.color.charAt(0).toUpperCase() + color.color.slice(1),
+        }
         return newObject
     })
     const chosenColorsData = subtask.colors.map((color) => {
-        const newObject = { value: color.id, label: color.color.charAt(0).toUpperCase() + color.color.slice(1) }
+        const newObject = {
+            value: color.id,
+            label: color.color.charAt(0).toUpperCase() + color.color.slice(1),
+        }
         return newObject
     })
 
@@ -147,7 +154,10 @@ const EditSubtaskDialog = ({
                 classes={{ paper: classes.dialogPaper }}
                 onClick={handleDialogClick}
             >
-                <DialogTitle aria-labelledby="max-width-dialog-title">Edit subtask</DialogTitle>
+                <DialogTitle aria-labelledby="max-width-dialog-title">
+                    Edit subtask
+                    <p className={classes.subtaskPrettyId}>{subtask.prettyId}</p>
+                </DialogTitle>
                 <DialogContent>
                     <TextField
                         required

@@ -64,7 +64,11 @@ const Subtask = ({
                         <Grid item classes={{ root: classes.subtaskTaskPrettyId }}>
                             <p>{subtask.task.prettyId}</p>
                         </Grid>
-                        <Grid item classes={{ root: classes.subtaskDropdownGrid }} onClick={handleDialogClick}>
+                        <Grid
+                            item
+                            classes={{ root: classes.subtaskDropdownGrid }}
+                            onClick={handleDialogClick}
+                        >
                             <DropDownSubtask
                                 subtask={subtask}
                                 column={column}
@@ -82,7 +86,9 @@ const Subtask = ({
                         <Grid item container direction="row" spacing={1} classes={{ root: classes.ticketColorPillsGrid }}>
                             {subtask.colors ? (
                                 subtask.colors.map((colorObj) => (
-                                    <Grid item key={colorObj.id}><ColorPill color={colorObj.color} /></Grid>
+                                    <Grid item key={colorObj.id}>
+                                        <ColorPill color={colorObj.color} />
+                                    </Grid>
                                 ))
                             ) : null}
                         </Grid>
