@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable max-len */
 import React from 'react'
 import { Grid } from '@material-ui/core'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
@@ -25,7 +24,14 @@ const Board = ({ board }) => {
     return (
         <Grid container classes={{ root: classes.board }}>
             <DragDropContext onDragEnd={(result) => onDragEnd(
-                result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board, setSnackbarMessage,
+                result,
+                moveTicketInColumn,
+                moveTicketFromColumn,
+                moveColumn,
+                client,
+                columns,
+                board,
+                setSnackbarMessage,
             )}
             >
 
@@ -39,7 +45,13 @@ const Board = ({ board }) => {
                             ref={provided.innerRef}
                             spacing={2}
                         >
-                            <Grid item><ColumnList columns={columns} columnOrder={columnOrder} boardId={board.id} /></Grid>
+                            <Grid item>
+                                <ColumnList
+                                    columns={columns}
+                                    columnOrder={columnOrder}
+                                    boardId={board.id}
+                                />
+                            </Grid>
                             {provided.placeholder}
 
                         </Grid>

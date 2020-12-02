@@ -34,7 +34,7 @@ type Mutation {
   deleteColumnById(id: ID!, boardId: ID!, eventId: ID!): ID
   moveTicketInColumn(newOrder: [TicketOrderInput!]!, columnId: ID!, boardId: ID!): Column
   moveTicketFromColumn(type: String!, ticketId: ID!, sourceColumnId: ID!, destColumnId: ID!, sourceTicketOrder: [TicketOrderInput!]!, destTicketOrder: [TicketOrderInput!]!, eventId: ID!): [Column!]
-  moveColumn(boardId: ID!, newColumnOrder: [ID!]!): ID!
+  moveColumn(boardId: ID!, eventId: ID!, newColumnOrder: [ID!]!): ID!
 }
 
 type Subscription {
@@ -52,7 +52,7 @@ type ColumnMutatedPayload {
 
 type columnMovedPayload {
   boardId: ID!
-  newColumnOrder: [ID!]
+  newColumnOrder: [ID!]!
 }
 
 enum MutationType {

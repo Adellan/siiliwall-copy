@@ -3,7 +3,7 @@
 import {
     COLUMNORDER,
 } from '../graphql/fragments'
-import { cacheTicketMovedInColumn, cacheTicketMovedFromColumn } from '../cacheService/cacheUpdates'
+import { cacheTicketMovedInColumn, cacheTicketMovedFromColumn, cacheColumnMoved } from '../cacheService/cacheUpdates'
 
 export const onDragEnd = async (
     result,
@@ -27,20 +27,13 @@ export const onDragEnd = async (
         newColumnOrder.splice(source.index, 1)
         newColumnOrder.splice(destination.index, 0, draggableId)
         const colName = board.columns.filter((b) => b.id === draggableId).map((c) => c.name)
-
-        const boardId = `Board:${board.id}`
-        client.writeFragment({
-            id: boardId,
-            fragment: COLUMNORDER,
-            data: {
-                columnOrder: newColumnOrder,
-            },
-        })
-
+        
+        cacheColumnMoved(board.id, newColumnOrder)
         await moveColumn({
             variables: {
                 orderArray: newColumnOrder,
                 boardId: board.id,
+                eventId
             },
         })
         let msg = `Moved column ${colName}`

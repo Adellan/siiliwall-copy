@@ -36,12 +36,10 @@ const useBoardSubscriptions = (id, eventId) => {
                 }
             },
         })
-    // tää sakkaa
     useSubscription(COLUMN_MOVED,
         {
             variables: { boardId: id, eventId },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
-                console.log('boardsub ', data)
                 const { boardId, newColumnOrder } = data.columnMoved
                 cacheColumnMoved(boardId, newColumnOrder)
             },

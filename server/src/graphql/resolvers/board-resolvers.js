@@ -35,7 +35,8 @@ const schema = {
         async addBoard(root, {
             name, prettyId, color, eventId, projectId,
         }) {
-            const addedBoard = await dataSources.boardService.addBoard(name, prettyId, color, projectId)
+            const addedBoard = await dataSources.boardService
+                .addBoard(name, prettyId, color, projectId)
             pubsub.publish(BOARD_ADDED, {
                 projectId,
                 eventId,
