@@ -73,8 +73,9 @@ const schema = {
             return editedTask
         },
         async deleteTaskById(root, {
-            id, columnId, boardId, eventId,
+            id, columnId, boardId, eventId, prettyId
         }) {
+            console.log(prettyId)
             let deletedTaskId
             try {
                 deletedTaskId = await dataSources.boardService.deleteTaskById(id)
@@ -83,7 +84,7 @@ const schema = {
                     eventId,
                     taskRemoved: {
                         removeType: 'DELETED',
-                        removeInfo: { taskId: id, columnId, boardId },
+                        removeInfo: { taskId: id, columnId, boardId, prettyId },
                     },
                 })
             } catch (e) {

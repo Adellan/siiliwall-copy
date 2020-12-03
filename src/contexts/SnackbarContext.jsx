@@ -10,7 +10,7 @@ import { useSnackbar } from 'notistack'
 const SnackbarContext = createContext(null)
 
 const SnackbarProvider = ({ children }) => {
-    const [snackbarMessage, setSnackbarMessage] = useState(null)
+    const [snackbarMessage, setSnackbarMessage] = useState()
     const { enqueueSnackbar } = useSnackbar()
     const handleSetSnachbarMessage = useCallback((value) => {
         setSnackbarMessage(value)
@@ -27,7 +27,7 @@ const SnackbarProvider = ({ children }) => {
         <SnackbarContext.Provider
             value={{ snackbarMessage, setSnackbarMessage: handleSetSnachbarMessage }}
         >
-            { children }
+            { children}
         </SnackbarContext.Provider>
     )
 }

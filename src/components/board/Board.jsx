@@ -20,15 +20,14 @@ const Board = ({ board }) => {
     const classes = boardPageStyles()
     const client = useApolloClient()
     const { setSnackbarMessage } = useSnackbarContext()
-
     const { columnOrder, columns } = board
+
     return (
         <Grid container classes={{ root: classes.board }}>
             <DragDropContext onDragEnd={(result) => onDragEnd(
                 result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board, setSnackbarMessage,
             )}
             >
-
                 <Droppable droppableId={board.id} direction="horizontal" type="column">
                     {(provided) => (
                         <Grid

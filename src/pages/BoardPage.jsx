@@ -15,9 +15,9 @@ const BoardPage = ({ id, eventId }) => {
         client.resetStore()
     }, [])
     const classes = boardPageStyles()
-    const [view, toggleView] = useState('swimlane')
+    const [view, toggleView] = useState('kanban')
     const queryResult = useBoardById(id)
-    useBoardSubscriptions(id, eventId)
+    useBoardSubscriptions(id, eventId, client)
 
     if (queryResult.loading) return null
     const board = queryResult.data.boardById

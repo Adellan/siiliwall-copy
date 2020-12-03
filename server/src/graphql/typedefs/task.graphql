@@ -45,7 +45,7 @@ type Mutation {
     description: String
     eventId: ID!
   ): Task
-  deleteTaskById(id: ID!, columnId: ID!, boardId: ID!, eventId: ID!): ID
+  deleteTaskById(id: ID!, columnId: ID!, boardId: ID!, eventId: ID!, prettyId: String!): ID
   archiveTaskById(id: ID!, columnId: ID!, boardId: ID!, eventId: ID!): ID
   restoreTaskById(id: ID!): Task
   addMemberForTask(id: ID!, userId: ID!): Task
@@ -70,6 +70,7 @@ type RemoveInfo {
   taskId: ID!
   columnId: ID!
   boardId: ID!
+  prettyId: String!
 }
 
 enum MutationType {

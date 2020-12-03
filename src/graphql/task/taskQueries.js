@@ -49,8 +49,8 @@ export const ADD_TASK = gql`
 `
 
 export const DELETE_TASK = gql`
-    mutation deleteTask($taskId: ID!, $columnId: ID!, $boardId: ID!, $eventId: ID!) {
-        deleteTaskById(id: $taskId, columnId: $columnId, boardId: $boardId, eventId: $eventId)
+    mutation deleteTask($taskId: ID!, $columnId: ID!, $boardId: ID!, $eventId: ID!, $prettyId: String!) {
+        deleteTaskById(id: $taskId, columnId: $columnId, boardId: $boardId, eventId: $eventId, prettyId: $prettyId)
     }
 `
 
@@ -138,6 +138,7 @@ export const TASK_REMOVED = gql`
           taskId
           columnId
           boardId
+          prettyId
       }
     }
   }
