@@ -141,6 +141,7 @@ const AlertBox = ({
                 columnId,
                 boardId,
                 eventId,
+                prettyId: subtaskPrettyId
             },
         })
         setSnackbarMessage(`Subtask ${subtaskPrettyId} deleted`)

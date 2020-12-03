@@ -49,7 +49,7 @@ const schema = {
         },
 
         async deleteSubtaskById(root, {
-            id, columnId, boardId, eventId,
+            id, columnId, boardId, eventId, prettyId
         }) {
             let deletedSubtask
             try {
@@ -63,6 +63,7 @@ const schema = {
                             subtaskId: id,
                             columnId,
                             boardId,
+                            prettyId
                         },
                     },
                 })

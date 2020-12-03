@@ -49,6 +49,7 @@ const useBoardSubscriptions = (id, eventId, client) => {
                 const { subtaskId, columnId, prettyId } = data.subtaskRemoved.removeInfo
                 if (data.subtaskRemoved.removeType === 'DELETED') {
                     removeSubtaskFromCache(subtaskId, columnId)
+                    setSnackbarMessage(`Subtask ${prettyId} deleted`)
                 } else if (data.subtaskRemoved.removeType === 'ARCHIVED') {
                     removeSubtaskFromCache(subtaskId, columnId)
                     setSnackbarMessage(`Subtask ${prettyId} archived`)
