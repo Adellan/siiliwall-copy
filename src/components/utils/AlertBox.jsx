@@ -116,6 +116,7 @@ const AlertBox = ({
                 columnId: column.id,
                 boardId,
                 eventId,
+                prettyId: task.prettyId
             },
         })
         setSnackbarMessage(`Task ${task.prettyId} archived`)

@@ -93,7 +93,7 @@ const schema = {
             return deletedTaskId
         },
         async archiveTaskById(root, {
-            id, columnId, boardId, eventId,
+            id, columnId, boardId, eventId, prettyId
         }) {
             try {
                 await dataSources.boardService.archiveTaskById(id)
@@ -102,7 +102,7 @@ const schema = {
                     eventId,
                     taskRemoved: {
                         removeType: 'ARCHIVED',
-                        removeInfo: { taskId: id, columnId, boardId },
+                        removeInfo: { taskId: id, columnId, boardId, prettyId },
                     },
                 })
             } catch (e) {

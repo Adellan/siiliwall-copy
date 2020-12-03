@@ -65,11 +65,11 @@ const useBoardSubscriptions = (id, eventId, client) => {
                 // At some point these cases will probably be handled differently
                 if (data.taskRemoved.removeType === 'DELETED') {
                     removeTaskFromCache(taskId, columnId, boardId)
-                    let msg = `Task ${prettyId} deleted`
-                    setSnackbarMessage(msg)
+                    setSnackbarMessage(`Task ${prettyId} deleted`)
 
                 } else if (data.taskRemoved.removeType === 'ARCHIVED') {
                     removeTaskFromCache(taskId, columnId, boardId)
+                    setSnackbarMessage(`Task ${prettyId} archived`)
                 }
             },
         })
