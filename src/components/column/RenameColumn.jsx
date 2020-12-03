@@ -30,7 +30,8 @@ const RenameColumn = ({ editId, column }) => {
         editColumn({
             variables: {
                 columnId: editId,
-                columnName: newName,
+                name: newName,
+                oldName: column.name,
                 boardId: column.board.id,
                 eventId,
             },

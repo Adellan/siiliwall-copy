@@ -24,11 +24,12 @@ const useBoardSubscriptions = (id, eventId, client) => {
         {
             variables: { boardId: id, eventId },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
-                if (data.columnMutated.mutationType === 'CREATED') {
-                    let msg = 'New column created'
+                const mutationType = data.columnMutated.mutationType
+                const oldName = data.columnMutated.oldName
+                if (mutationType === 'CREATED') {
                     addNewColumn(data.columnMutated.column)
-                    setSnackbarMessage(msg)
-
+                } else if (mutationType === 'EDITED') {
+                    setSnackbarMessage(`Renamed column ${oldName}`)
                 }
             },
         })

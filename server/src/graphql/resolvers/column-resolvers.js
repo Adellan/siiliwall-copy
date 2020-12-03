@@ -63,7 +63,7 @@ const schema = {
         },
 
         async editColumnById(root, {
-            id, name, boardId, eventId,
+            id, name, oldName, boardId, eventId,
         }) {
             let editedColumn
             try {
@@ -74,6 +74,7 @@ const schema = {
                     columnMutated: {
                         mutationType: 'EDITED',
                         column: editedColumn.dataValues,
+                        oldName
                     },
                 })
             } catch (e) {
