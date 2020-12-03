@@ -62,8 +62,8 @@ export const EDIT_SUBTASK = gql`
 `
 
 export const ARCHIVE_SUBTASK = gql`
-    mutation archiveSubtask($subtaskId: ID!, $columnId: ID!, $boardId: ID!, $eventId: ID!) {
-        archiveSubtaskById(id: $subtaskId, columnId: $columnId, boardId: $boardId, eventId: $eventId)
+    mutation archiveSubtask($subtaskId: ID!, $columnId: ID!, $boardId: ID!, $eventId: ID!, $prettyId: String!) {
+        archiveSubtaskById(id: $subtaskId, columnId: $columnId, boardId: $boardId, eventId: $eventId, prettyId: $prettyId)
     }
 `
 
@@ -80,6 +80,7 @@ export const SUBTASK_REMOVED = gql`
                 subtaskId,
                 columnId,
                 boardId
+                prettyId
             }
         }
     }

@@ -46,7 +46,7 @@ type Mutation {
     eventId: ID!
   ): Task
   deleteTaskById(id: ID!, columnId: ID!, boardId: ID!, eventId: ID!, prettyId: String!): ID
-  archiveTaskById(id: ID!, columnId: ID!, boardId: ID!, eventId: ID!): ID
+  archiveTaskById(id: ID!, columnId: ID!, boardId: ID!, eventId: ID!, prettyId: String!): ID
   restoreTaskById(id: ID!): Task
   addMemberForTask(id: ID!, userId: ID!): Task
 }

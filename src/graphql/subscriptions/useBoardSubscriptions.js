@@ -15,15 +15,10 @@ import {
     updateSwimlaneOrderOfBoardToTheCache,
     addNewColumn,
 } from '../../cacheService/cacheUpdates'
-import { TASKS_PRETTY_ID } from '../fragments'
 import { useSnackbarContext } from '../../contexts/SnackbarContext'
 
 const useBoardSubscriptions = (id, eventId, client) => {
     const { setSnackbarMessage } = useSnackbarContext()
-    // const idsForCahce = { taskId: '', subtaskId: '', columnId: '' }
-    // console.log(client)
-
-
 
     useSubscription(COLUMN_MUTATED,
         {
@@ -51,11 +46,12 @@ const useBoardSubscriptions = (id, eventId, client) => {
         {
             variables: { boardId: id, eventId },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
-                const { subtaskId, columnId } = data.subtaskRemoved.removeInfo
+                const { subtaskId, columnId, prettyId } = data.subtaskRemoved.removeInfo
                 if (data.subtaskRemoved.removeType === 'DELETED') {
                     removeSubtaskFromCache(subtaskId, columnId)
                 } else if (data.subtaskRemoved.removeType === 'ARCHIVED') {
                     removeSubtaskFromCache(subtaskId, columnId)
+                    setSnackbarMessage(`Subtask ${prettyId} archived`)
                 }
             },
         })
@@ -63,7 +59,6 @@ const useBoardSubscriptions = (id, eventId, client) => {
         {
             variables: { boardId: id, eventId },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
-                console.log(data.taskRemoved.removeInfo)
                 const { taskId, columnId, boardId, prettyId } = data.taskRemoved.removeInfo
                 // At some point these cases will probably be handled differently
                 if (data.taskRemoved.removeType === 'DELETED') {

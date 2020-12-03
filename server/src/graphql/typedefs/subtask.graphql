@@ -52,7 +52,7 @@ type Mutation {
   ): Subtask
   addMemberForSubtask(id: ID!, userId: ID!): Task
   deleteSubtaskById(id: ID!, columnId: ID!, boardId: ID!, eventId: ID!): ID
-  archiveSubtaskById(id: ID!, columnId: ID!, boardId: ID!, eventId: ID!): ID
+  archiveSubtaskById(id: ID!, columnId: ID!, boardId: ID!, eventId: ID!, prettyId: String!): ID
 }
 
 type Subscription {
@@ -84,4 +84,5 @@ type RemoveInfo {
   subtaskId: ID!
   columnId: ID!
   boardId: ID!
+  prettyId: String!
 }

@@ -73,7 +73,7 @@ const schema = {
         },
 
         async archiveSubtaskById(root, {
-            id, columnId, boardId, eventId,
+            id, columnId, boardId, eventId, prettyId
         }) {
             let archivedSubtask
             try {
@@ -87,6 +87,7 @@ const schema = {
                             subtaskId: id,
                             columnId,
                             boardId,
+                            prettyId
                         },
                     },
                 })

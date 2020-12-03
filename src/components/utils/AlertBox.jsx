@@ -83,6 +83,7 @@ const AlertBox = ({
     }
 
     const archiveSubtaskById = (subtaskId, columnId, subtaskPrettyId) => {
+        console.log(subtaskPrettyId)
         removeSubtaskFromCache(subtaskId, columnId)
         archiveSubtask({
             variables: {
@@ -90,6 +91,7 @@ const AlertBox = ({
                 columnId,
                 boardId,
                 eventId,
+                prettyId: subtaskPrettyId
             },
         })
         setSnackbarMessage(`Subtask ${subtaskPrettyId} archived`)
@@ -191,7 +193,7 @@ const AlertBox = ({
             archiveTaskById()
         }
         if (action === 'ARCHIVE_SUBTASK') {
-            archiveSubtaskById(subtask.id, column.id)
+            archiveSubtaskById(subtask.id, column.id, subtask.prettyId)
         }
     }
 
