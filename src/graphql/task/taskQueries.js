@@ -100,7 +100,7 @@ export const TASK_MUTATED = gql`
   subscription taskMutated($boardId: ID!, $eventId: ID!) {
     taskMutated(boardId: $boardId, eventId: $eventId) {
       mutationType
-      node {
+      task {
         id
         prettyId
         title

@@ -111,7 +111,7 @@ const AddTaskDialog = ({
             emptyState()
             toggleDialog()
         }
-        setSnackbarMessage('New task created')
+        setSnackbarMessage(`New task ${title} created`)
     }
 
     const handleCancel = () => {

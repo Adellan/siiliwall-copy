@@ -58,7 +58,7 @@ type Subscription {
 
 type TaskMutationPayload {
   mutationType: MutationType!
-  node: Task!
+  task: Task!
 }
 
 type TaskRemovedPayload {

@@ -85,8 +85,11 @@ const useBoardSubscriptions = (id, eventId) => {
                 // For example notifying the user that something got updated when mutationType is "UPDATED"
                 // At the moment the values of the UPDATE subscription response are automatically
                 // updated to the cache to the correct task entity
-                if (data.taskMutated.mutationType === 'CREATED') {
-                    addNewTask(data.taskMutated.node)
+                const type = data.taskMutated.mutationType
+                const { task } = data.taskMutated
+                if (type === 'CREATED') {
+                    addNewTask(task)
+                    setSnackbarMessage(`New task ${task.title} created`)
                 }
             },
         })
@@ -95,7 +98,8 @@ const useBoardSubscriptions = (id, eventId) => {
             variables: { boardId: id, eventId },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
                 const { subtask } = data.subtaskMutated
-                if (data.subtaskMutated.mutationType === 'CREATED') {
+                const type = data.subtaskMutated.mutationType
+                if (type === 'CREATED') {
                     addNewSubtask(subtask)
                     setSnackbarMessage(`New subtask ${subtask.name} created`)
                 }
