@@ -17,7 +17,6 @@ const ColumnList = ({ columns, columnOrder, boardId }) => {
 
     const handleSave = () => {
         const eventId = window.localStorage.getItem('eventId')
-
         addColumn({
             variables: {
                 boardId,
@@ -25,8 +24,9 @@ const ColumnList = ({ columns, columnOrder, boardId }) => {
                 eventId,
             },
         })
+        console.log(boardId, columnName, eventId)
         setColumnName('')
-        setSnackbarMessage('New column created')
+        setSnackbarMessage(`New column ${columnName} created`)
     }
 
     const newColumnOrder = columnOrder.map((id) => columns.find((column) => column.id === id))

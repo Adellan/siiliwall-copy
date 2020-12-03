@@ -102,7 +102,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, column, taskId, bo
         })
         emptyState()
         toggleAddDialog(event)
-        setSnackbarMessage('New subtask created')
+        setSnackbarMessage(`New subtask ${name} created`)
     }
 
     const handleCancel = (e) => {

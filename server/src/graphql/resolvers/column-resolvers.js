@@ -45,6 +45,7 @@ const schema = {
 
     Mutation: {
         async addColumnForBoard(root, { boardId, columnName, eventId }) {
+            console.log('haloo')
             let createdColumn
             try {
                 createdColumn = await dataSources.boardService.addColumnForBoard(boardId, columnName)
@@ -54,6 +55,7 @@ const schema = {
                     columnMutated: {
                         mutationType: 'CREATED',
                         column: createdColumn.dataValues,
+                        oldName: columnName
                     },
                 })
             } catch (e) {

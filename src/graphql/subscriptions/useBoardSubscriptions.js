@@ -17,17 +17,20 @@ import {
 } from '../../cacheService/cacheUpdates'
 import { useSnackbarContext } from '../../contexts/SnackbarContext'
 
-const useBoardSubscriptions = (id, eventId, client) => {
+const useBoardSubscriptions = (id, eventId) => {
     const { setSnackbarMessage } = useSnackbarContext()
 
     useSubscription(COLUMN_MUTATED,
         {
             variables: { boardId: id, eventId },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
+                console.log(data.columnMutated)
                 const mutationType = data.columnMutated.mutationType
                 const oldName = data.columnMutated.oldName
                 if (mutationType === 'CREATED') {
+                    console.log(data.columnMutated.column)
                     addNewColumn(data.columnMutated.column)
+                    setSnackbarMessage(`New column ${oldName} created`)
                 } else if (mutationType === 'EDITED') {
                     setSnackbarMessage(`Renamed column ${oldName}`)
                 }
@@ -91,8 +94,10 @@ const useBoardSubscriptions = (id, eventId, client) => {
         {
             variables: { boardId: id, eventId },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
+                const { subtask } = data.subtaskMutated
                 if (data.subtaskMutated.mutationType === 'CREATED') {
-                    addNewSubtask(data.subtaskMutated.subtask)
+                    addNewSubtask(subtask)
+                    setSnackbarMessage(`New subtask ${subtask.name} created`)
                 }
             },
         })

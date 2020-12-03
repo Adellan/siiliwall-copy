@@ -62,7 +62,7 @@ type Subscription {
 
 type ColumnMutatedPayload {
   mutationType: MutationType!
-  column: Column!,
+  column: Column!
   oldName: String!
 }
 
