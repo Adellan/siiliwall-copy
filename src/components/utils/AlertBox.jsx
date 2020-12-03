@@ -128,6 +128,7 @@ const AlertBox = ({
                 columnId: column.id,
                 boardId,
                 eventId,
+                name: column.name
             },
         })
         setSnackbarMessage(`Column ${column.name} deleted`)

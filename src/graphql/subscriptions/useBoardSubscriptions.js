@@ -36,9 +36,10 @@ const useBoardSubscriptions = (id, eventId, client) => {
         {
             variables: { boardId: id, eventId },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
-                const { columnId, boardId } = data.columnDeleted.removeInfo
+                const { columnId, boardId, name } = data.columnDeleted.removeInfo
                 if (data.columnDeleted.removeType === 'DELETED') {
                     deleteColumnFromCache(columnId, boardId)
+                    setSnackbarMessage(`Column ${name} deleted`)
                 }
             },
         })

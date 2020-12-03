@@ -31,7 +31,7 @@ type Query {
 type Mutation {
   addColumnForBoard(boardId: ID!, columnName: String!, eventId: ID!): Column
   editColumnById(id: ID!, name: String!, boardId: ID!, eventId: ID!): Column
-  deleteColumnById(id: ID!, boardId: ID!, eventId: ID!): ID
+  deleteColumnById(id: ID!, boardId: ID!, eventId: ID!, name: String!): ID
   moveTicketInColumn(
     newOrder: [TicketOrderInput!]!
     columnId: ID!
@@ -78,6 +78,7 @@ type ColumnRemovePayload {
 type RemoveInfo {
   columnId: ID!
   boardId: ID!
+  name: String!
 }
 
 enum RemoveType {

@@ -82,7 +82,7 @@ const schema = {
             return editedColumn
         },
 
-        async deleteColumnById(root, { id, boardId, eventId }) {
+        async deleteColumnById(root, { id, boardId, eventId, name }) {
             let deletedColumnId
             try {
                 deletedColumnId = await dataSources.boardService.deleteColumnById(id)
@@ -91,7 +91,7 @@ const schema = {
                     eventId,
                     columnDeleted: {
                         removeType: 'DELETED',
-                        removeInfo: { columnId: id, boardId },
+                        removeInfo: { columnId: id, boardId, name },
                     },
                 })
             } catch (e) {
