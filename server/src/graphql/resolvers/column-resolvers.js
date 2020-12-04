@@ -6,7 +6,9 @@ const { pubsub } = require('../pubsub')
 const TICKET_MOVED_IN_COLUMN = 'TICKET_MOVED_IN_COLUMN'
 const TICKET_MOVED_FROM_COLUMN = 'TICKET_MOVED_FROM_COLUMN'
 const COLUMN_DELETED = 'COLUMN_DELETED'
-const COLUMN_MUTATED = 'COLUMN_MUTATED'
+const COLUMN_CREATED = 'COLUMN_CREATED'
+const COLUMN_EDITED = 'COLUMN_EDITED'
+
 
 const schema = {
     Query: {
@@ -35,9 +37,15 @@ const schema = {
                 (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId),
             ),
         },
-        columnMutated: {
+        columnCreated: {
             subscribe: withFilter(
-                () => pubsub.asyncIterator(COLUMN_MUTATED),
+                () => pubsub.asyncIterator(COLUMN_CREATED),
+                (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId),
+            ),
+        },
+        columnEdited: {
+            subscribe: withFilter(
+                () => pubsub.asyncIterator(COLUMN_EDITED),
                 (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId),
             ),
         },
@@ -45,17 +53,14 @@ const schema = {
 
     Mutation: {
         async addColumnForBoard(root, { boardId, columnName, eventId }) {
-            console.log('haloo')
             let createdColumn
             try {
                 createdColumn = await dataSources.boardService.addColumnForBoard(boardId, columnName)
-                pubsub.publish(COLUMN_MUTATED, {
+                pubsub.publish(COLUMN_CREATED, {
                     boardId,
                     eventId,
-                    columnMutated: {
-                        mutationType: 'CREATED',
+                    columnCreated: {
                         column: createdColumn.dataValues,
-                        oldName: columnName
                     },
                 })
             } catch (e) {
@@ -70,11 +75,10 @@ const schema = {
             let editedColumn
             try {
                 editedColumn = await dataSources.boardService.editColumnById(id, name)
-                pubsub.publish(COLUMN_MUTATED, {
+                pubsub.publish(COLUMN_EDITED, {
                     boardId,
                     eventId,
-                    columnMutated: {
-                        mutationType: 'EDITED',
+                    columnEdited: {
                         column: editedColumn.dataValues,
                         oldName
                     },

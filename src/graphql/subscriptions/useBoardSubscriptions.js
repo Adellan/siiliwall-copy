@@ -3,7 +3,7 @@ import { useSubscription } from '@apollo/client'
 import { SUBTASK_REMOVED, SUBTASK_MUTATED } from '../subtask/subtaskQueries'
 import { TASK_MUTATED, TASK_REMOVED, SWIMLANE_MOVED } from '../task/taskQueries'
 import { TICKET_MOVED_IN_COLUMN, TICKET_MOVED_FROM_COLUMN } from '../ticket/ticketQueries'
-import { COLUMN_MUTATED, COLUMN_DELETED } from '../column/columnQueries'
+import { COLUMN_EDITED, COLUMN_DELETED, COLUMN_CREATED } from '../column/columnQueries'
 import {
     removeSubtaskFromCache,
     removeTaskFromCache,
@@ -20,21 +20,24 @@ import { useSnackbarContext } from '../../contexts/SnackbarContext'
 const useBoardSubscriptions = (id, eventId) => {
     const { setSnackbarMessage } = useSnackbarContext()
 
-    useSubscription(COLUMN_MUTATED,
+    useSubscription(COLUMN_EDITED,
         {
             variables: { boardId: id, eventId },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
-                console.log(data.columnMutated)
-                const mutationType = data.columnMutated.mutationType
-                const oldName = data.columnMutated.oldName
-                if (mutationType === 'CREATED') {
-                    console.log(data.columnMutated.column)
-                    addNewColumn(data.columnMutated.column)
-                    setSnackbarMessage(`New column ${oldName} created`)
-                } else if (mutationType === 'EDITED') {
-                    setSnackbarMessage(`Renamed column ${oldName}`)
-                }
-            },
+                const oldName = data.columnEdited.oldName
+                setSnackbarMessage(`Renamed column ${oldName}`)
+            }
+        })
+    useSubscription(COLUMN_CREATED,
+        {
+            // TODO selvitä miksei kolumnin lisäys toimi subskriptioille
+            variables: { boardId: id, eventId },
+            onSubscriptionData: ({ subscriptionData: { data } }) => {
+                console.log(data.columnCreated.column)
+                const { name } = data.columnCreated.column
+                addNewColumn(data.columnCreated.column)
+                setSnackbarMessage(`New column ${name} created`)
+            }
         })
     useSubscription(COLUMN_DELETED,
         {
@@ -90,6 +93,8 @@ const useBoardSubscriptions = (id, eventId) => {
                 if (type === 'CREATED') {
                     addNewTask(task)
                     setSnackbarMessage(`New task ${task.title} created`)
+                } else if (type === 'UPDATED') {
+                    setSnackbarMessage(`Modified task ${task.prettyId}`)
                 }
             },
         })
@@ -102,6 +107,8 @@ const useBoardSubscriptions = (id, eventId) => {
                 if (type === 'CREATED') {
                     addNewSubtask(subtask)
                     setSnackbarMessage(`New subtask ${subtask.name} created`)
+                } else if (type === 'UPDATED') {
+                    setSnackbarMessage(`Modified subtask ${subtask.prettyId}`)
                 }
             },
         })

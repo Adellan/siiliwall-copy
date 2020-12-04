@@ -64,7 +64,7 @@ const schema = {
                     eventId,
                     taskMutated: {
                         mutationType: 'UPDATED',
-                        node: editedTask,
+                        task: editedTask,
                     },
                 })
             } catch (e) {

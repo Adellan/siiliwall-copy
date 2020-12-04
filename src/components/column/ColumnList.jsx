@@ -24,7 +24,6 @@ const ColumnList = ({ columns, columnOrder, boardId }) => {
                 eventId,
             },
         })
-        console.log(boardId, columnName, eventId)
         setColumnName('')
         setSnackbarMessage(`New column ${columnName} created`)
     }

@@ -57,18 +57,17 @@ type Subscription {
     eventId: ID!
   ): TicketMovedFromColumnPayload!
   columnDeleted(boardId: ID!, eventId: ID!): ColumnRemovePayload!
-  columnMutated(boardId: ID!, eventId: ID!): ColumnMutatedPayload!
+  columnEdited(boardId: ID!, eventId: ID!): ColumnEditedPayload!
+  columnCreated(boardId: ID!, eventId: ID!): ColumnCreatedPayload!
 }
 
-type ColumnMutatedPayload {
-  mutationType: MutationType!
+type ColumnEditedPayload {
   column: Column!
   oldName: String!
 }
 
-enum MutationType {
-  CREATED
-  EDITED
+type ColumnCreatedPayload {
+  column: Column!
 }
 
 type ColumnRemovePayload {

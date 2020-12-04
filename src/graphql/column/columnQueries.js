@@ -33,10 +33,9 @@ export const EDIT_COLUMN = gql`
     }
 `
 
-export const COLUMN_MUTATED = gql`
-    subscription columnMutated($boardId: ID!, $eventId: ID!) {
-        columnMutated(boardId: $boardId, eventId: $eventId) {
-            mutationType
+export const COLUMN_EDITED = gql`
+    subscription columnEdited($boardId: ID!, $eventId: ID!) {
+        columnEdited(boardId: $boardId, eventId: $eventId) {
             column {
                 id
                 name
@@ -46,6 +45,20 @@ export const COLUMN_MUTATED = gql`
                 }
             }
             oldName
+        }
+    }
+`
+export const COLUMN_CREATED = gql`
+    subscription columnCreated($boardId: ID!, $eventId: ID!) {
+        columnCreated(boardId: $boardId, eventId: $eventId) {
+            column {
+                id
+                name
+                orderNumber
+                board {
+                    id
+                }
+            }
         }
     }
 `
