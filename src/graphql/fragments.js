@@ -143,4 +143,21 @@ export const BOARD_ID_BY_COLUMN_ID = gql`
         }
     }
 `
-
+export const COLUMN_NAME = gql`
+    fragment getColumnName on Column {
+        id
+        name
+    }
+`
+export const TASK_PRETTYID = gql`
+    fragment getTasksPrettyId on Task {
+        id
+        prettyId
+    }
+`
+export const SUBTASK_PRETTYID = gql`
+    fragment getSubtasksPrettyId on Subtask {
+        id
+        prettyId
+    }
+`

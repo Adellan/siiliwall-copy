@@ -4,6 +4,9 @@ import { SUBTASK_REMOVED, SUBTASK_MUTATED } from '../subtask/subtaskQueries'
 import { TASK_MUTATED, TASK_REMOVED, SWIMLANE_MOVED } from '../task/taskQueries'
 import { TICKET_MOVED_IN_COLUMN, TICKET_MOVED_FROM_COLUMN } from '../ticket/ticketQueries'
 import { COLUMN_EDITED, COLUMN_DELETED, COLUMN_CREATED } from '../column/columnQueries'
+import { COLUMN_NAME, TASK_PRETTYID, SUBTASK_PRETTYID } from '../fragments'
+import { useApolloClient } from '@apollo/client'
+
 import {
     removeSubtaskFromCache,
     removeTaskFromCache,
@@ -19,6 +22,7 @@ import { useSnackbarContext } from '../../contexts/SnackbarContext'
 
 const useBoardSubscriptions = (id, eventId) => {
     const { setSnackbarMessage } = useSnackbarContext()
+    const client = useApolloClient()
 
     useSubscription(COLUMN_EDITED,
         {
@@ -30,7 +34,6 @@ const useBoardSubscriptions = (id, eventId) => {
         })
     useSubscription(COLUMN_CREATED,
         {
-            // TODO selvitä miksei kolumnin lisäys toimi subskriptioille
             variables: { boardId: id, eventId },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
                 const { name } = data.columnCreated.column
@@ -130,13 +133,29 @@ const useBoardSubscriptions = (id, eventId) => {
             variables: { boardId: id, eventId },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
                 const {
-                    ticketInfo, snackbarInfo, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder,
+                    ticketInfo, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder,
                 } = data.ticketMovedFromColumn
+                const columnIdForCache = `Column:${destColumnId}`
+                const subtaskIdForCache = `Subtask:${ticketInfo.ticketId}`
+                const { name } = client.readFragment({
+                    id: columnIdForCache,
+                    fragment: COLUMN_NAME
+                })
+
                 cacheTicketMovedFromColumn(ticketInfo, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder)
-                if (snackbarInfo.ticketType === 'task') {
-                    setSnackbarMessage(`Task ${snackbarInfo.prettyId} moved to ${snackbarInfo.columnName}`)
-                } else if (snackbarInfo.ticketType === 'subtask') {
-                    setSnackbarMessage(`Subtask ${snackbarInfo.prettyId} moved to ${snackbarInfo.columnName}`)
+                if (ticketInfo.type === 'task') {
+                    const taskIdForCache = `Task:${ticketInfo.ticketId}`
+                    const taskMoved = client.readFragment({
+                        id: taskIdForCache,
+                        fragment: TASK_PRETTYID
+                    })
+                    setSnackbarMessage(`Task ${taskMoved.prettyId} moved to ${name}`)
+                } else if (ticketInfo.type === 'subtask') {
+                    const subtaskMoved = client.readFragment({
+                        id: subtaskIdForCache,
+                        fragment: SUBTASK_PRETTYID
+                    })
+                    setSnackbarMessage(`Subtask ${subtaskMoved.prettyId} moved to ${name}`)
                 }
             },
         })

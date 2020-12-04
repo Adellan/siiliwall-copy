@@ -124,9 +124,8 @@ const schema = {
         },
 
         async moveTicketFromColumn(root, {
-            type, ticketId, /*snackbarInfo,*/ sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder, eventId,
+            type, ticketId, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder, eventId,
         }) {
-            //console.log('haloo')
             await dataSources.boardService.changeTicketsColumnId(type, ticketId, destColumnId)
             const sourceColumn = await dataSources.boardService.reOrderTicketsOfColumn(sourceTicketOrder, sourceColumnId)
             const destColumn = await dataSources.boardService.reOrderTicketsOfColumn(destTicketOrder, destColumnId)
@@ -135,7 +134,6 @@ const schema = {
                 eventId,
                 ticketMovedFromColumn: {
                     ticketInfo: { ticketId, type },
-                    //snackbarInfo,
                     sourceColumnId,
                     destColumnId,
                     sourceTicketOrder,

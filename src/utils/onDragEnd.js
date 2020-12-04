@@ -143,9 +143,11 @@ export const onDragEnd = async (
             }
         })
 
-        // TODO selvitä miksei lähetä snackbarInfoa oikein
+        /* 
+            TODO selvitä miksei mutaation mukana voida lähettää esim. ticket prettyId tai kolumnin nimeä??
+        */
+
         // We can send the necessary data to the subscriptions by sending this object to the server and subsctiption listener
-        const snackbarInfo = { columName: destinationColumn.name, prettyId: ticketBeingMoved.prettyId, ticketType: movedTicketOrderObject.type }
         // update the manipulated columns in the cache
         cacheTicketMovedFromColumn(
             { type: movedTicketOrderObject.type, ticketId: draggableId },
@@ -162,7 +164,6 @@ export const onDragEnd = async (
                 destColumnId: destinationColumn.id,
                 sourceTicketOrder: newTicketOrderOfSourceColumn,
                 destTicketOrder: newTicketOrderOfDestinationColumn,
-                snackbarInfo: snackbarInfo,
                 eventId
             },
         })
