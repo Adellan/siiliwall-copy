@@ -7,12 +7,12 @@ import { useSnackbarContext } from '../../contexts/SnackbarContext'
 
 const ColumnList = ({ columns, columnOrder, boardId }) => {
     const classes = boardPageStyles()
-    const [columnName, setColumnName] = useState('')
+    const [name, setName] = useState('')
     const [addColumn] = useAddColumn()
     const { setSnackbarMessage } = useSnackbarContext()
 
     const handleChange = (event) => {
-        setColumnName(event.target.value)
+        setName(event.target.value)
     }
 
     const handleSave = () => {
@@ -20,12 +20,12 @@ const ColumnList = ({ columns, columnOrder, boardId }) => {
         addColumn({
             variables: {
                 boardId,
-                columnName,
+                name,
                 eventId,
             },
         })
-        setColumnName('')
-        setSnackbarMessage(`New column ${columnName} created`)
+        setName('')
+        setSnackbarMessage(`New column ${name} created`)
     }
 
     const newColumnOrder = columnOrder.map((id) => columns.find((column) => column.id === id))
@@ -42,13 +42,13 @@ const ColumnList = ({ columns, columnOrder, boardId }) => {
                     name="title"
                     label="Name"
                     type="text"
-                    value={columnName}
+                    value={name}
                     fullWidth
                     onChange={handleChange}
-                    id="inputColumnName"
+                    id="inputname"
                 />
                 <Button
-                    disabled={!columnName.length}
+                    disabled={!name.length}
                     color="primary"
                     onClick={handleSave}
                     id="addColumnButton"

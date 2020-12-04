@@ -33,7 +33,6 @@ const useBoardSubscriptions = (id, eventId) => {
             // TODO selvitä miksei kolumnin lisäys toimi subskriptioille
             variables: { boardId: id, eventId },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
-                console.log(data.columnCreated.column)
                 const { name } = data.columnCreated.column
                 addNewColumn(data.columnCreated.column)
                 setSnackbarMessage(`New column ${name} created`)
@@ -131,9 +130,14 @@ const useBoardSubscriptions = (id, eventId) => {
             variables: { boardId: id, eventId },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
                 const {
-                    ticketInfo, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder,
+                    ticketInfo, snackbarInfo, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder,
                 } = data.ticketMovedFromColumn
                 cacheTicketMovedFromColumn(ticketInfo, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder)
+                if (snackbarInfo.ticketType === 'task') {
+                    setSnackbarMessage(`Task ${snackbarInfo.prettyId} moved to ${snackbarInfo.columnName}`)
+                } else if (snackbarInfo.ticketType === 'subtask') {
+                    setSnackbarMessage(`Subtask ${snackbarInfo.prettyId} moved to ${snackbarInfo.columnName}`)
+                }
             },
         })
     useSubscription(SWIMLANE_MOVED,

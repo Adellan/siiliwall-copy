@@ -491,7 +491,7 @@ class BoardService {
         return addedBoard
     }
 
-    async addColumnForBoard(boardId, columnName) {
+    async addColumnForBoard(boardId, name) {
         /*
           At the time of new columns' creation we want to display it as
           the component in the very right of the board,
@@ -505,7 +505,7 @@ class BoardService {
             addedColumn = await this.store.Column.create({
                 id: uuid(),
                 boardId,
-                name: columnName,
+                name: name,
                 orderNumber: largestOrderNumber + 1,
             })
         } catch (e) {

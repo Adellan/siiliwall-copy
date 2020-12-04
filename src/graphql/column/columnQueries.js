@@ -2,8 +2,8 @@
 import { gql } from '@apollo/client'
 
 export const ADD_COLUMN = gql`
-    mutation addColumnForBoard($boardId: ID!, $columnName: String!, $eventId: ID!) {
-        addColumnForBoard(boardId: $boardId, columnName: $columnName, eventId: $eventId) {
+    mutation addColumnForBoard($boardId: ID!, $name: String!, $eventId: ID!) {
+        addColumnForBoard(boardId: $boardId, name: $name, eventId: $eventId) {
             id
             name
             board {

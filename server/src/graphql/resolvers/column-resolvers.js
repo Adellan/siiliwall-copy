@@ -52,10 +52,10 @@ const schema = {
     },
 
     Mutation: {
-        async addColumnForBoard(root, { boardId, columnName, eventId }) {
+        async addColumnForBoard(root, { boardId, name, eventId }) {
             let createdColumn
             try {
-                createdColumn = await dataSources.boardService.addColumnForBoard(boardId, columnName)
+                createdColumn = await dataSources.boardService.addColumnForBoard(boardId, name)
                 pubsub.publish(COLUMN_CREATED, {
                     boardId,
                     eventId,
@@ -124,8 +124,9 @@ const schema = {
         },
 
         async moveTicketFromColumn(root, {
-            type, ticketId, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder, eventId,
+            type, ticketId, /*snackbarInfo,*/ sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder, eventId,
         }) {
+            //console.log('haloo')
             await dataSources.boardService.changeTicketsColumnId(type, ticketId, destColumnId)
             const sourceColumn = await dataSources.boardService.reOrderTicketsOfColumn(sourceTicketOrder, sourceColumnId)
             const destColumn = await dataSources.boardService.reOrderTicketsOfColumn(destTicketOrder, destColumnId)
@@ -134,6 +135,7 @@ const schema = {
                 eventId,
                 ticketMovedFromColumn: {
                     ticketInfo: { ticketId, type },
+                    //snackbarInfo,
                     sourceColumnId,
                     destColumnId,
                     sourceTicketOrder,

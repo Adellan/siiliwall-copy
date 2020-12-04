@@ -41,7 +41,7 @@ type Query {
 }
 
 type Mutation {
-  addColumnForBoard(boardId: ID!, columnName: String!, eventId: ID!): Column
+  addColumnForBoard(boardId: ID!, name: String!, eventId: ID!): Column
   editColumnById(id: ID!, name: String!, oldName: String!, boardId: ID!, eventId: ID!): Column
   deleteColumnById(id: ID!, boardId: ID!, eventId: ID!, name: String!): ID
   moveTicketInColumn(
@@ -58,6 +58,7 @@ type Mutation {
     destColumnId: ID!
     sourceTicketOrder: [TicketOrderInput!]!
     destTicketOrder: [TicketOrderInput!]!
+    snackbarInfo: snackbarInfoInput!
     eventId: ID!
   ): [Column!]
   moveColumn(boardId: ID!, newColumnOrder: [ID!]!): ID!
@@ -107,6 +108,7 @@ type TicketMovedInColumnPayload {
 
 type TicketMovedFromColumnPayload {
   ticketInfo: TicketOrderObject!
+  snackbarInfo: snackbarInfoObject!
   sourceColumnId: ID!
   destColumnId: ID!
   sourceTicketOrder: [TicketOrderObject!]!

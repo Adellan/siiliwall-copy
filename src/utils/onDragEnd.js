@@ -43,8 +43,7 @@ export const onDragEnd = async (
                 boardId: board.id,
             },
         })
-        let msg = `Moved column ${colName}`
-        setSnackbarMessage(msg)
+        setSnackbarMessage(`Moved column ${colName}`)
         return
     }
 
@@ -57,8 +56,6 @@ export const onDragEnd = async (
         const movedTicket = newTicketOrder.splice(source.index, 1)
         newTicketOrder.splice(destination.index, 0, movedTicket[0])
         let snackbarInfo = { columnName: column.name, prettyId: '', ticketType: '' }
-        let prettyIdForSnackbar
-        let ticketTypeForSnackbar
         let msg = null
         let ticketPrettyId = null
         if (movedTicket[0]?.type === 'task') {
@@ -101,7 +98,6 @@ export const onDragEnd = async (
 
         const [movedTicketOrderObject] = newTicketOrderOfSourceColumn.splice(source.index, 1)
         newTicketOrderOfDestinationColumn.splice(destination.index, 0, movedTicketOrderObject)
-
         // Find the columns being manipulated
         const sourceColumnFromCache = columns
             .find((column) => column.id === sourceColumn.id)
@@ -132,21 +128,24 @@ export const onDragEnd = async (
         const updatedsubtasksOfDestinationColumn = []
 
         updatedTicketsOfSourceColumn.forEach((ticket) => {
-            if (ticket.['__typename'] === 'Task') {
+            if (ticket.__typename === 'Task') {
                 updatedTasksOfSourceColumn.push(ticket)
-            } else if (ticket.['__typename'] === 'Subtask') {
+            } else if (ticket.__typename === 'Subtask') {
                 updatedSubtasksOfSourceColumn.push(ticket)
             }
         })
 
         updatedTicketsOfDestinationColumn.forEach((ticket) => {
-            if (ticket.['__typename'] === 'Task') {
+            if (ticket.__typename === 'Task') {
                 updatedTasksOfDestinationColumn.push(ticket)
-            } else if (ticket.['__typename'] === 'Subtask') {
+            } else if (ticket.__typename === 'Subtask') {
                 updatedsubtasksOfDestinationColumn.push(ticket)
             }
         })
 
+        // TODO selvitä miksei lähetä snackbarInfoa oikein
+        // We can send the necessary data to the subscriptions by sending this object to the server and subsctiption listener
+        const snackbarInfo = { columName: destinationColumn.name, prettyId: ticketBeingMoved.prettyId, ticketType: movedTicketOrderObject.type }
         // update the manipulated columns in the cache
         cacheTicketMovedFromColumn(
             { type: movedTicketOrderObject.type, ticketId: draggableId },
@@ -163,16 +162,17 @@ export const onDragEnd = async (
                 destColumnId: destinationColumn.id,
                 sourceTicketOrder: newTicketOrderOfSourceColumn,
                 destTicketOrder: newTicketOrderOfDestinationColumn,
+                snackbarInfo: snackbarInfo,
                 eventId
             },
         })
-        let ticketTitle = null
-        if (ticketBeingMoved.['__typename'] === 'Subtask') {
-            ticketTitle = `Subtask ${ticketBeingMoved.prettyId} moved to ${destinationColumn.name}`
+        let snackbarMessage = null
+        if (ticketBeingMoved.__typename === 'Subtask') {
+            snackbarMessage = `Subtask ${ticketBeingMoved.prettyId} moved to ${destinationColumn.name}`
         }
-        if (ticketBeingMoved.['__typename'] === 'Task') {
-            ticketTitle = `Task ${ticketBeingMoved.prettyId} moved to ${destinationColumn.name}`
+        if (ticketBeingMoved.__typename === 'Task') {
+            snackbarMessage = `Task ${ticketBeingMoved.prettyId} moved to ${destinationColumn.name}`
         }
-        setSnackbarMessage(ticketTitle)
+        setSnackbarMessage(snackbarMessage)
     }
 }

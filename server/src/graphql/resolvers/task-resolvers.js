@@ -75,7 +75,6 @@ const schema = {
         async deleteTaskById(root, {
             id, columnId, boardId, eventId, prettyId
         }) {
-            console.log(prettyId)
             let deletedTaskId
             try {
                 deletedTaskId = await dataSources.boardService.deleteTaskById(id)
