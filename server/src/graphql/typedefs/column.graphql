@@ -13,6 +13,18 @@ type TicketOrderObject {
   type: AllowedTicketType
 }
 
+input snackbarInfoInput {
+  columnName: String!
+  prettyId: String!
+  ticketType: String!
+}
+
+type snackbarInfoObject{
+  columnName: String!
+  prettyId: String!
+  ticketType: AllowedTicketType
+}
+
 type Column {
   id: ID!
   name: String!
@@ -35,6 +47,7 @@ type Mutation {
   moveTicketInColumn(
     newOrder: [TicketOrderInput!]!
     columnId: ID!
+    snackbarInfo: snackbarInfoInput!
     boardId: ID!
     eventId: ID!
   ): Column
@@ -89,6 +102,7 @@ enum RemoveType {
 type TicketMovedInColumnPayload {
   newOrder: [TicketOrderObject!]!
   columnId: ID!
+  snackbarInfo: snackbarInfoObject!
 }
 
 type TicketMovedFromColumnPayload {

@@ -108,7 +108,7 @@ const schema = {
         },
 
         async moveTicketInColumn(root, {
-            newOrder, columnId, boardId, eventId,
+            newOrder, columnId, snackbarInfo, boardId, eventId,
         }) {
             const modifiedColumn = await dataSources.boardService.reOrderTicketsOfColumn(newOrder, columnId)
             pubsub.publish(TICKET_MOVED_IN_COLUMN, {
@@ -117,6 +117,7 @@ const schema = {
                 ticketMovedInColumn: {
                     newOrder,
                     columnId,
+                    snackbarInfo
                 },
             })
             return modifiedColumn

@@ -116,8 +116,13 @@ const useBoardSubscriptions = (id, eventId) => {
         {
             variables: { boardId: id, eventId },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
-                const { columnId, newOrder } = data.ticketMovedInColumn
+                const { columnId, newOrder, snackbarInfo } = data.ticketMovedInColumn
                 cacheTicketMovedInColumn(columnId, newOrder)
+                if (snackbarInfo.ticketType === 'task') {
+                    setSnackbarMessage(`Task ${snackbarInfo.prettyId} moved in ${snackbarInfo.columnName}`)
+                } else if (snackbarInfo.ticketType === 'subtask') {
+                    setSnackbarMessage(`Subtask ${snackbarInfo.prettyId} moved in ${snackbarInfo.columnName}`)
+                }
             },
         })
 

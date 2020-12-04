@@ -2,8 +2,8 @@ import { gql } from '@apollo/client'
 
 export const MOVE_TICKET_IN_COLUMN = gql`
     
-    mutation moveTicketkInColumn($orderArray: [TicketOrderInput!]!, $columnId: ID!, $boardId: ID!, $eventId: ID!) {
-        moveTicketInColumn(newOrder: $orderArray, columnId: $columnId, boardId: $boardId, eventId: $eventId) {
+    mutation moveTicketkInColumn($orderArray: [TicketOrderInput!]!, $columnId: ID!, $snackbarInfo: snackbarInfoInput!, $boardId: ID!, $eventId: ID!) {
+        moveTicketInColumn(newOrder: $orderArray, columnId: $columnId, snackbarInfo: $snackbarInfo, boardId: $boardId, eventId: $eventId) {
             id
         }
     }
@@ -37,6 +37,11 @@ export const TICKET_MOVED_IN_COLUMN = gql`
           type
       }
       columnId
+      snackbarInfo {
+          columnName
+          prettyId
+          ticketType
+      }
     }
   }
 `

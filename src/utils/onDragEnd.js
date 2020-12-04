@@ -56,34 +56,37 @@ export const onDragEnd = async (
 
         const movedTicket = newTicketOrder.splice(source.index, 1)
         newTicketOrder.splice(destination.index, 0, movedTicket[0])
-
+        let snackbarInfo = { columnName: column.name, prettyId: '', ticketType: '' }
+        let prettyIdForSnackbar
+        let ticketTypeForSnackbar
         let msg = null
         let ticketPrettyId = null
         if (movedTicket[0]?.type === 'task') {
             ticketPrettyId = column.tasks.filter((t) => t.id === movedTicket[0]?.ticketId)
-                .map((f) => f.prettyId)
+                .map((f) => f.prettyId).toString()
             msg = `Task ${ticketPrettyId} moved in ${column.name}`
+            snackbarInfo.prettyId = ticketPrettyId
+            snackbarInfo.ticketType = 'task'
         }
         if (movedTicket[0]?.type === 'subtask') {
-            let stask = column.subtasks.map((s) => s.task)
-            ticketPrettyId = stask[0]?.prettyId
             const subtask = column.subtasks.find((s) => s.id === movedTicket[0]?.ticketId)
             msg = `Subtask ${subtask.prettyId} moved in ${column.name}`
+            snackbarInfo.prettyId = subtask.prettyId
+            snackbarInfo.ticketType = 'subtask'
         }
-
         // Handle cache updates
         cacheTicketMovedInColumn(column.id, newTicketOrder)
-       
         // Send mutation to the server
         await moveTicketInColumn({
             variables: {
                 orderArray: newTicketOrder,
                 columnId: column.id,
+                snackbarInfo: snackbarInfo,
                 boardId: board.id,
                 eventId
             },
         })
-        
+
         setSnackbarMessage(msg)
     }
 
@@ -146,7 +149,7 @@ export const onDragEnd = async (
 
         // update the manipulated columns in the cache
         cacheTicketMovedFromColumn(
-            {type: movedTicketOrderObject.type, ticketId: draggableId}, 
+            { type: movedTicketOrderObject.type, ticketId: draggableId },
             sourceColumn.id,
             destinationColumn.id,
             newTicketOrderOfSourceColumn,
