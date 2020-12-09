@@ -21,9 +21,11 @@ const BoardPage = ({ id, eventId }) => {
     }, [])
     const classes = boardPageStyles()
     const [view, toggleView] = useState('kanban')
-    const [filter, setFilter] = useState(['User'])
-    const [userName, setUserName] = useState('')
-    const [open, setOpen] = useState(false)
+    const [filter, setFilter] = useState('')
+    const [filterOptions, setFilterOptions] = useState(['User'])
+    const [selectedUser, setSelectedUser] = useState('')
+    const [filterSelector, setFilterSelector] = useState(false)
+    const [optionSelector, setOptionSelector] = useState(false)
     const queryResult = useBoardById(id)
     useBoardSubscriptions(id, eventId)
 
@@ -31,6 +33,7 @@ const BoardPage = ({ id, eventId }) => {
     const board = queryResult.data.boardById
     const { users } = board
     const userNames = users.map(user => user.userName)
+    const boardsTickets = board.columns.map(column => column.tasks.concat(column.subtasks)).flat()
 
     const switchView = (viewParam) => {
         toggleView(viewParam)
@@ -40,16 +43,36 @@ const BoardPage = ({ id, eventId }) => {
         setFilter(event.target.value)
     }
 
-    const handleFilterChange = (event) => {
-        setUserName(event.target.value)
+    const selectUser = (event) => {
+        setSelectedUser(event.target.value)
     }
 
-    const handleOpen = () => {
-        setOpen(true)
+    const openFilterSelector = () => {
+        setFilterSelector(true)
     }
 
-    const handleClose = () => {
-        setOpen(false)
+    const closeFilterSelector = () => {
+        setFilterSelector(false)
+    }
+    console.log(selectedUser)
+    const openOptionSelector = () => {
+        setOptionSelector(true)
+    }
+
+    const closeOptionSelector = () => {
+        setOptionSelector(false)
+    }
+
+    const filterBoardByOption = () => {
+        let filteredTicketList = []
+        boardsTickets.map(ticket => {
+            if (ticket.owner && ticket.owner.userName === selectedUser) {
+                filteredTicketList.push(ticket)
+            } else if (ticket.members && ticket.members.find(member => member.userName === selectedUser)) {
+                filteredTicketList.push(ticket)
+            }
+        })
+        return filteredTicketList
     }
 
     return (
@@ -68,9 +91,9 @@ const BoardPage = ({ id, eventId }) => {
                 <Grid item>
                     <FormControl classes={{ root: classes.filterForm }}>
                         <Select
-                            open={open}
-                            onClose={handleClose}
-                            onOpen={handleOpen}
+                            open={filterSelector}
+                            onClose={closeFilterSelector}
+                            onOpen={openFilterSelector}
                             value={filter}
                             onChange={switchFilter}
                             MenuProps={{
@@ -85,10 +108,41 @@ const BoardPage = ({ id, eventId }) => {
                                 getContentAnchorEl: null
                             }}
                         >
-                            {filter.map(option => <MenuItem value={option}>{option}</MenuItem>)}
+                            {filterOptions.map((option, index) => <MenuItem key={index} value={option}>{option}</MenuItem>)}
                         </Select>
                     </FormControl>
                 </Grid>
+                <Grid item>
+                    {filter && (
+                        <FormControl classes={{ root: classes.filterForm }}>
+                            <Select
+                                open={optionSelector}
+                                onClose={closeOptionSelector}
+                                onOpen={openOptionSelector}
+                                value={selectedUser}
+                                onChange={selectUser}
+                                MenuProps={{
+                                    anchorOrigin: {
+                                        vertical: "bottom",
+                                        horizontal: "left"
+                                    },
+                                    transformOrigin: {
+                                        vertical: "top",
+                                        horizontal: "left"
+                                    },
+                                    getContentAnchorEl: null
+                                }}
+                            >
+                                {userNames.map((name, index) => <MenuItem key={index} value={name}>{name}</MenuItem>)}
+                            </Select>
+                        </FormControl>
+                    )}
+                </Grid>
+                {selectedUser && (
+                    <Grid item>
+                        <Button classes={{ root: classes.filterButton }} onClick={() => filterBoardByOption()}>Filter</Button>
+                    </Grid>
+                )}
             </Grid>
             <Grid item>
                 {view === 'kanban' ? <Board board={board} /> : <SwimlaneView board={board} />}

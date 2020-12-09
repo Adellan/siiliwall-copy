@@ -235,6 +235,12 @@ export const boardPageStyles = makeStyles({
         minWidth: 120
     },
 
+    filterButton: {
+        color: colours.blue,
+        fontFamily: font,
+        fontSize: 14,
+    },
+
     // COLUMN STYLES
     column: {
         backgroundColor: colours.lightergrey,
