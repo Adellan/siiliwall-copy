@@ -26,6 +26,7 @@ const BoardPage = ({ id, eventId }) => {
     const [selectedUser, setSelectedUser] = useState('')
     const [filterSelector, setFilterSelector] = useState(false)
     const [optionSelector, setOptionSelector] = useState(false)
+    const [filteredBoard, setFilteredBoard] = useState(null)
     const queryResult = useBoardById(id)
     useBoardSubscriptions(id, eventId)
 
@@ -54,7 +55,7 @@ const BoardPage = ({ id, eventId }) => {
     const closeFilterSelector = () => {
         setFilterSelector(false)
     }
-    console.log(selectedUser)
+
     const openOptionSelector = () => {
         setOptionSelector(true)
     }
@@ -62,9 +63,11 @@ const BoardPage = ({ id, eventId }) => {
     const closeOptionSelector = () => {
         setOptionSelector(false)
     }
-
+    console.log(board)
     const filterBoardByOption = () => {
+        setFilteredBoard(board)
         let filteredTicketList = []
+        // We go through the array of tickets in the board and push tickets which owner or member the selected user is
         boardsTickets.map(ticket => {
             if (ticket.owner && ticket.owner.userName === selectedUser) {
                 filteredTicketList.push(ticket)
@@ -72,8 +75,26 @@ const BoardPage = ({ id, eventId }) => {
                 filteredTicketList.push(ticket)
             }
         })
+        // We create an array of all the boards ticketOrderObjects
+        const ticketOrderOfBoard = board.columns.map(column => column.ticketOrder).flat()
+        // We create an array where we include only the ticketOrderObjects that belong to the selected user
+        const filteredTicketOrder = filteredTicketList.map(ticket => ticketOrderOfBoard.find(ticketOrderObj => ticketOrderObj.ticketId === ticket.id))
+        // We go through the board's columns and create a new array of their ticketOrders where we only show tickets belonging to the selected user
+        const newTicketOrdersForColumns = board.columns.map(column => column.ticketOrder).map(colTicketOrderArr =>
+            colTicketOrderArr.filter(colTicketOrderObj =>
+                filteredTicketOrder.find(ticketOrderObj => ticketOrderObj.ticketId === colTicketOrderObj.ticketId)))
+        // We create a copy of boards columns with filtered ticketOrders
+        const filteredColumns = board.columns.map((column, index) => {
+            column = Object.assign({}, column, { ticketOrder: newTicketOrdersForColumns[index] })
+            return column
+        })
+        //const filteredTasks = board.columns.map(column => column.tasks.map
+        // Finally we set the filteredBoard state to be a copy of the original except for the array of columns 
+        setFilteredBoard(prevState => ({ ...prevState, columns: filteredColumns }))
+
         return filteredTicketList
     }
+    console.log('filteredBoard', filteredBoard)
 
     return (
         <Grid
