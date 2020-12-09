@@ -166,7 +166,7 @@ const BoardPage = ({ id, eventId }) => {
                 )}
             </Grid>
             <Grid item>
-                {view === 'kanban' ? <Board board={board} /> : <SwimlaneView board={board} />}
+                {view === 'kanban' ? <Board board={filteredBoard ? filteredBoard : board} /> : <SwimlaneView board={board} />}
             </Grid>
         </Grid>
     )
