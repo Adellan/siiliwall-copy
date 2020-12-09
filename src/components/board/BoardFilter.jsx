@@ -8,9 +8,9 @@ import {
 } from '@material-ui/core'
 import { filterBoardByOption } from '../../utils/boardFiltering'
 
-const BoardFilter = ({ setFilteredBoard, board, classes }) => {
+const BoardFilter = ({ filteredBoard, setFilteredBoard, board, classes }) => {
     const [filter, setFilter] = useState('')
-    const [filterOptions, setFilterOptions] = useState(['User'])
+    const [filterOptions, setFilterOptions] = useState(['Users'])
     const [selectedUser, setSelectedUser] = useState('')
     const [filterSelector, setFilterSelector] = useState(false)
     const [optionSelector, setOptionSelector] = useState(false)
@@ -41,9 +41,13 @@ const BoardFilter = ({ setFilteredBoard, board, classes }) => {
         setOptionSelector(false)
     }
 
+    const handleFilterClear = () => {
+        setFilteredBoard(board)
+    }
+
     return (
         <Grid item container direction='row' alignItems='center' spacing={2} classes={{ root: classes.filterGrid }}>
-            <Grid item>Filter by</Grid>
+            <Grid item ><p style={{ fontFamily: 'Arial Regular' }}>Filter from</p></Grid>
             <Grid item>
                 <FormControl classes={{ root: classes.filterForm }}>
                     <Select
@@ -68,38 +72,53 @@ const BoardFilter = ({ setFilteredBoard, board, classes }) => {
                     </Select>
                 </FormControl>
             </Grid>
-            <Grid item>
-                {filter && (
-                    <FormControl classes={{ root: classes.filterForm }}>
-                        <Select
-                            open={optionSelector}
-                            onClose={closeOptionSelector}
-                            onOpen={openOptionSelector}
-                            value={selectedUser}
-                            onChange={selectUser}
-                            MenuProps={{
-                                anchorOrigin: {
-                                    vertical: "bottom",
-                                    horizontal: "left"
-                                },
-                                transformOrigin: {
-                                    vertical: "top",
-                                    horizontal: "left"
-                                },
-                                getContentAnchorEl: null
-                            }}
-                        >
-                            {userNames.map((name, index) => <MenuItem key={index} value={name}>{name}</MenuItem>)}
-                        </Select>
-                    </FormControl>
-                )}
-            </Grid>
-            {selectedUser && (
-                <Grid item>
-                    <Button classes={{ root: classes.filterButton }} onClick={() => filterBoardByOption(setFilteredBoard, board, selectedUser)}>Filter</Button>
+            {filter && (
+                <Grid item container direction='row' alignItems='center' style={{ width: 'auto' }} spacing={2}>
+                    <Grid item><p style={{ fontFamily: 'Arial Regular' }}>by the name of</p></Grid>
+                    <Grid item>
+                        <FormControl classes={{ root: classes.filterForm }}>
+                            <Select
+                                open={optionSelector}
+                                onClose={closeOptionSelector}
+                                onOpen={openOptionSelector}
+                                value={selectedUser}
+                                onChange={selectUser}
+                                MenuProps={{
+                                    anchorOrigin: {
+                                        vertical: "bottom",
+                                        horizontal: "left"
+                                    },
+                                    transformOrigin: {
+                                        vertical: "top",
+                                        horizontal: "left"
+                                    },
+                                    getContentAnchorEl: null
+                                }}
+                            >
+                                {userNames.map((name, index) => <MenuItem key={index} value={name}>{name}</MenuItem>)}
+                            </Select>
+                        </FormControl>
+                    </Grid>
                 </Grid>
-            )}
-        </Grid>
+            )
+            }
+            {
+                selectedUser && (
+                    <Grid item container style={{ width: 'auto' }}>
+                        {
+                            filteredBoard && filteredBoard !== board && (
+                                <Grid item>
+                                    <Button onClick={() => handleFilterClear()}>Clear</Button>
+                                </Grid>
+                            )
+                        }
+                        <Grid item>
+                            <Button classes={{ root: classes.filterButton }} onClick={() => filterBoardByOption(setFilteredBoard, board, selectedUser)}>Filter</Button>
+                        </Grid>
+                    </Grid>
+                )
+            }
+        </Grid >
     )
 }
 export default BoardFilter

@@ -38,7 +38,7 @@ const BoardPage = ({ id, eventId }) => {
             {view === 'kanban' && (
                 <Grid item classes={{ root: classes.invisibleGrid }}></Grid>
             )}
-            <Grid item><BoardFilter setFilteredBoard={setFilteredBoard} board={board} classes={classes} /></Grid>
+            <Grid item><BoardFilter filteredBoard={filteredBoard} setFilteredBoard={setFilteredBoard} board={board} classes={classes} /></Grid>
             <Grid item>
                 {view === 'kanban' ? <Board board={filteredBoard ? filteredBoard : board} /> : <SwimlaneView board={board} />}
             </Grid>
