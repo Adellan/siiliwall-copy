@@ -21,42 +21,49 @@ const users = [
         userName: 'Paavo',
         passwordHash: 'pVfUtAA3',
         email: 'dmonteith0@mysql.com',
+        projectId: '9da1b35f-181a-4397-a5a5-47abced10a66'
     },
     {
         id: '654df13f-51be-4b25-8f0e-7c2f40a3a81e',
         userName: 'Ilpo',
         passwordHash: 'JaAcfq',
         email: 'dcutchey1@over-blog.com',
+        projectId: '9da1b35f-181a-4397-a5a5-47abced10a66'
     },
     {
         id: '8b251e01-0bec-41bf-b756-ba53c76d04e6',
         userName: 'Katja',
         passwordHash: '71gDVE6meHB',
         email: 'ggwyther2@harvard.edu',
+        projectId: '9da1b35f-181a-4397-a5a5-47abced10a66'
     },
     {
         id: 'db295a15-0b1d-4e6d-a2bb-da25fe1ecf98',
         userName: 'Pauliina',
         passwordHash: '7PwsnfIiyJNt',
         email: 'loxnam3@quantcast.com',
+        projectId: '9da1b35f-181a-4397-a5a5-47abced10a66'
     },
     {
         id: '1fd5abe7-159e-4224-8a44-7ae3ee902a54',
         userName: 'Heini',
         passwordHash: '3KWad8H',
         email: 'eholtom4@hatena.ne.jp',
+        projectId: '9da1b35f-181a-4397-a5a5-47abced10a66'
     },
     {
         id: 'e8a3f9a4-e9ac-47ec-9eb6-f7f87975382a',
         userName: 'Erika',
         passwordHash: '6xswZfRQe9X',
         email: 'spankettman5@latimes.com',
+        projectId: '9da1b35f-181a-4397-a5a5-47abced10a66'
     },
     {
         id: '6285867e-7db8-4769-8730-26d18ef9aba9',
         userName: 'scovil6',
         passwordHash: 'O2dyiBYteo',
         email: 'gwoollends6@163.com',
+        projectId: '9da1b35f-181a-4397-a5a5-47abced10a66'
     },
 ]
 
@@ -442,6 +449,7 @@ const userSubtasks = [
         subtaskId: '3345bb1f-c8dd-46f2-a099-a1e2c347ae88',
     },
 ]
+
 
 module.exports = {
     projects, boards, columns, stories, tasks, subtasks, users, userStories, usertasks, userSubtasks, colors, colortasks, colorsubtasks

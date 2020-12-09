@@ -8,6 +8,7 @@ type Board {
   swimlaneOrder: [ID!]!
   ticketCount: Int
   color: Int!
+  users: [User!]!
 }
 
 type Query {

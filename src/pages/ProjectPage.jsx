@@ -51,24 +51,24 @@ const ProjectPage = ({ id, eventId }) => {
                             {boardsInOrder.map(({
                                 id, name, ticketCount, color,
                             }) => (
-                                <Grid item key={id}>
-                                    <Link to={`/boards/${id}`} className="board_button">
-                                        <Card classes={{ root: classes.boardCard }}>
-                                            <Grid item container direction="row" classes={{ root: classes.boardCardRowGrid }} justify="space-between">
-                                                <Grid item container data-cy="boardGrid" direction="column" justify="space-between" classes={{ root: classes.boardCardColumnGrid }}>
-                                                    <Grid item>
-                                                        <Typography classes={{ root: classes.boardCardName }}>{name.charAt(0).toUpperCase() + name.slice(1)}</Typography>
+                                    <Grid item key={id}>
+                                        <Link to={`/boards/${id}`} className="board_button">
+                                            <Card classes={{ root: classes.boardCard }}>
+                                                <Grid item container direction="row" classes={{ root: classes.boardCardRowGrid }} justify="space-between">
+                                                    <Grid item container data-cy="boardGrid" direction="column" justify="space-between" classes={{ root: classes.boardCardColumnGrid }}>
+                                                        <Grid item>
+                                                            <Typography classes={{ root: classes.boardCardName }}>{name.charAt(0).toUpperCase() + name.slice(1)}</Typography>
+                                                        </Grid>
+                                                        <Grid item>
+                                                            <Typography classes={{ root: classes.boardCardTasks }}>{ticketCount ? `${ticketCount} tasks` : '0 tasks'}</Typography>
+                                                        </Grid>
                                                     </Grid>
-                                                    <Grid item>
-                                                        <Typography classes={{ root: classes.boardCardTasks }}>{ticketCount ? `${ticketCount} tasks` : '0 tasks'}</Typography>
-                                                    </Grid>
+                                                    <Grid item classes={{ root: classes.boardCardBlob1 }} style={{ backgroundImage: color === 0 ? `url(${Blob1})` : `url(${Blob2})` }} />
                                                 </Grid>
-                                                <Grid item classes={{ root: classes.boardCardBlob1 }} style={{ backgroundImage: color === 0 ? `url(${Blob1})` : `url(${Blob2})` }} />
-                                            </Grid>
-                                        </Card>
-                                    </Link>
-                                </Grid>
-                            ))}
+                                            </Card>
+                                        </Link>
+                                    </Grid>
+                                ))}
                             <Grid item>
                                 <Button data-cy="addBoard" classes={{ root: classes.addBoardButton }} onClick={() => handleClickOpen()}>+ Create new board</Button>
                             </Grid>

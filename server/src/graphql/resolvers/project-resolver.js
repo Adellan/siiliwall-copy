@@ -1,3 +1,4 @@
+const { users } = require('../../../dummyData')
 const dataSources = require('../../datasources')
 
 const schema = {
@@ -20,7 +21,7 @@ const schema = {
     Project: {
         boards(root) {
             return dataSources.boardService.getBoardsByProjectId(root.id)
-        }
+        },
     }
 }
 module.exports = schema

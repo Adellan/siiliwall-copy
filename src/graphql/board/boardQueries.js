@@ -9,6 +9,10 @@ export const BOARD_BY_ID = gql`
             columnOrder
             swimlaneOrder
             ticketCount
+            users {
+                id
+                userName
+            }
             columns {
                 id
                 name

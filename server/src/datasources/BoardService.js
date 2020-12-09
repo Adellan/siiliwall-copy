@@ -508,6 +508,7 @@ class BoardService {
                 name: columnName,
                 orderNumber: largestOrderNumber + 1,
             })
+
         } catch (e) {
             console.error(e)
         }
@@ -864,6 +865,21 @@ class BoardService {
             console.error(e)
         }
         return usersFromDb
+    }
+
+    async getUsersByBoardId(boardId) {
+        let projectId
+        let usersFromProject
+        try {
+            const board = await this.store.Board.findByPk(boardId)
+            projectId = board.projectId
+            usersFromProject = await this.store.User.findAll({
+                where: { projectId }
+            })
+        } catch (e) {
+            console.error(e)
+        }
+        return usersFromProject
     }
 
     async addUser(userName) {

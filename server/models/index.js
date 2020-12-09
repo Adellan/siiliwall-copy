@@ -38,14 +38,14 @@ const initializeDb = async () => {
     try {
         await db.sequelize.sync({ force: true })
         await Promise.all(
-            dummyData.users.map(async (user) => {
-                const resolved = await db.User.create(user)
+            dummyData.projects.map(async (project) => {
+                const resolved = await db.Project.create(project)
                 return resolved
             }),
         )
         await Promise.all(
-            dummyData.projects.map(async (project) => {
-                const resolved = await db.Project.create(project)
+            dummyData.users.map(async (user) => {
+                const resolved = await db.User.create(user)
                 return resolved
             }),
         )
