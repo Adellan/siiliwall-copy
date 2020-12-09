@@ -21,21 +21,27 @@ const BoardPage = ({ id, eventId }) => {
     }, [])
     const classes = boardPageStyles()
     const [view, toggleView] = useState('kanban')
-    const [filter, setFilter] = useState('')
+    const [filter, setFilter] = useState(['User'])
+    const [userName, setUserName] = useState('')
     const [open, setOpen] = useState(false)
     const queryResult = useBoardById(id)
     useBoardSubscriptions(id, eventId)
 
     if (queryResult.loading) return null
     const board = queryResult.data.boardById
-    console.log(board)
-    // const users = boar
+    const { users } = board
+    const userNames = users.map(user => user.userName)
+
     const switchView = (viewParam) => {
         toggleView(viewParam)
     }
 
     const switchFilter = (event) => {
         setFilter(event.target.value)
+    }
+
+    const handleFilterChange = (event) => {
+        setUserName(event.target.value)
     }
 
     const handleOpen = () => {
@@ -49,7 +55,7 @@ const BoardPage = ({ id, eventId }) => {
     return (
         <Grid
             container
-            direction="row"
+            direction="column"
             classes={{ root: classes.root }}
             id="boardElement"
         >
@@ -57,16 +63,32 @@ const BoardPage = ({ id, eventId }) => {
             {view === 'kanban' && (
                 <Grid item classes={{ root: classes.invisibleGrid }}></Grid>
             )}
-            <Grid item>
-                <Button onClick={handleOpen}>Filter by</Button>
-                <FormControl>
-                    <InputLabel>User</InputLabel>
-                    <Select
-                        open={open}
-                        onClose={handleClose}
-                        onOpen={handleOpen}
-                    />
-                </FormControl>
+            <Grid item container direction='row' alignItems='center' spacing={2} classes={{ root: classes.filterGrid }}>
+                <Grid item>Filter by</Grid>
+                <Grid item>
+                    <FormControl classes={{ root: classes.filterForm }}>
+                        <Select
+                            open={open}
+                            onClose={handleClose}
+                            onOpen={handleOpen}
+                            value={filter}
+                            onChange={switchFilter}
+                            MenuProps={{
+                                anchorOrigin: {
+                                    vertical: "bottom",
+                                    horizontal: "left"
+                                },
+                                transformOrigin: {
+                                    vertical: "top",
+                                    horizontal: "left"
+                                },
+                                getContentAnchorEl: null
+                            }}
+                        >
+                            {filter.map(option => <MenuItem value={option}>{option}</MenuItem>)}
+                        </Select>
+                    </FormControl>
+                </Grid>
             </Grid>
             <Grid item>
                 {view === 'kanban' ? <Board board={board} /> : <SwimlaneView board={board} />}

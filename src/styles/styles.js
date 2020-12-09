@@ -227,6 +227,14 @@ export const boardPageStyles = makeStyles({
         flexWrap: 'nowrap',
     },
 
+    filterGrid: {
+        marginLeft: 20
+    },
+
+    filterForm: {
+        minWidth: 120
+    },
+
     // COLUMN STYLES
     column: {
         backgroundColor: colours.lightergrey,
