@@ -12,6 +12,7 @@ export const filterBoardByOption = (setFilteredBoard, board, selectedUser) => {
         } else if (ticket.members && ticket.members.find(member => member.userName === selectedUser)) {
             filteredTicketList.push(ticket)
         }
+        return filteredTicketList
     })
     // We create an array of all the boards ticketOrderObjects
     const ticketOrderOfBoard = board.columns.map(column => column.ticketOrder).flat()
