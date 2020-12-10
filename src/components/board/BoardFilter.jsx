@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Grid,
     MenuItem,
@@ -16,6 +16,33 @@ const BoardFilter = ({ filteredBoard, setFilteredBoard, board, classes }) => {
     const [optionSelector, setOptionSelector] = useState(false)
     const { users } = board
     const userNames = users.map(user => user.userName)
+
+    /* 
+        Deleting or creating a column in the filtered board updates the original board and so the
+        filtered board doesn't show the updates. We have to manually update the filtered boards columns and 
+        columnorder for that reason.
+    */
+    useEffect(() => {
+        if (filteredBoard) { //IF WE HAVE FILTERED THE BOARD
+            if (board.columns.length !== filteredBoard.columns.length) {
+                let changedColumnId
+                let changedColumn
+                let newColumnArray
+                let newColumnOrderArray
+                if (board.columns.length < filteredBoard.columns.length) { //IF REMOVING COLUMN
+                    changedColumn = filteredBoard.columnOrder.filter(filtColumnId => board.columnOrder.indexOf(filtColumnId) === -1).toString()
+                    newColumnArray = filteredBoard.columns.filter(filtColumn => filtColumn.id !== changedColumn)
+                    newColumnOrderArray = filteredBoard.columnOrder.filter(filtColumnId => filtColumnId !== changedColumn)
+                } else { //IF ADDING COLUMN
+                    changedColumnId = board.columnOrder[board.columnOrder.length - 1]
+                    changedColumn = board.columns.find(column => column.id === changedColumnId)
+                    newColumnArray = [...filteredBoard.columns, changedColumn]
+                    newColumnOrderArray = [...filteredBoard.columnOrder, changedColumnId]
+                }
+                setFilteredBoard(prevState => ({ ...prevState, columnOrder: newColumnOrderArray, columns: newColumnArray }))
+            }
+        }
+    }, [board.columns])
 
     const switchFilter = (event) => {
         setFilter(event.target.value)

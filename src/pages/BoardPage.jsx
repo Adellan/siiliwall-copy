@@ -15,7 +15,6 @@ const BoardPage = ({ id, eventId }) => {
     }, [])
     const classes = boardPageStyles()
     const [view, toggleView] = useState('kanban')
-
     const [filteredBoard, setFilteredBoard] = useState(null)
     const queryResult = useBoardById(id)
     useBoardSubscriptions(id, eventId)
@@ -26,6 +25,8 @@ const BoardPage = ({ id, eventId }) => {
     const switchView = (viewParam) => {
         toggleView(viewParam)
     }
+    console.log('board', board)
+    console.log('filteredBoard', filteredBoard)
 
     return (
         <Grid
