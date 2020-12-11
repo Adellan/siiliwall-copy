@@ -67,7 +67,6 @@ const TicketList = ({
                 filteredTicketObjectArray ?
                     filteredTicketObjectArray.map((ticket, index) => {
                         let component
-                        console.log('ticket', ticket)
                         if (ticket.__typename === 'Task') {
                             component = (
                                 <Grid item key={ticket.id}>
