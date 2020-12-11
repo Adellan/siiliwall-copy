@@ -47,7 +47,7 @@ type Mutation {
     destTicketOrder: [TicketOrderInput!]!
     eventId: ID!
   ): [Column!]
-  moveColumn(boardId: ID!, newColumnOrder: [ID!]!): ID!
+  moveColumn(boardId: ID!, newColumnOrder: [ID!]!, eventId: ID!): ID!
 }
 
 type Subscription {
@@ -58,6 +58,13 @@ type Subscription {
   ): TicketMovedFromColumnPayload!
   columnDeleted(boardId: ID!, eventId: ID!): ColumnRemovePayload!
   columnMutated(boardId: ID!, eventId: ID!): ColumnMutatedPayload!
+  columnMoved(boardId: ID!, eventId: ID!): ColumnMovedPayload!
+}
+
+type ColumnMovedPayload {
+  boardId: ID!
+  eventId: ID!
+  newColumnOrder: [ID!]!
 }
 
 type ColumnMutatedPayload {

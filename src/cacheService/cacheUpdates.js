@@ -284,3 +284,14 @@ export const updateSwimlaneOrderOfBoardToTheCache = (boardId, affectedSwimlanes,
         })
     })
 }
+
+export const cacheColumnMoved = (boardId, newColumnOrder) => {
+    const boardIdForCache = `Board:${boardId}`
+    client.writeFragment({
+        id: boardIdForCache,
+        fragment: COLUMNORDER,
+        data: {
+            columnOrder: newColumnOrder,
+        },
+    })
+}

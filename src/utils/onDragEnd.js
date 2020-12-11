@@ -3,7 +3,7 @@
 import {
     COLUMNORDER,
 } from '../graphql/fragments'
-import { cacheTicketMovedInColumn, cacheTicketMovedFromColumn } from '../cacheService/cacheUpdates'
+import { cacheTicketMovedInColumn, cacheTicketMovedFromColumn, cacheColumnMoved } from '../cacheService/cacheUpdates'
 
 export const onDragEnd = async (
     result,
@@ -41,6 +41,7 @@ export const onDragEnd = async (
             variables: {
                 orderArray: newColumnOrder,
                 boardId: board.id,
+                eventId
             },
         })
         let msg = `Moved column ${colName}`

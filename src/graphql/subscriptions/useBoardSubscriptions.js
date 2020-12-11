@@ -3,7 +3,7 @@ import { useSubscription } from '@apollo/client'
 import { SUBTASK_REMOVED, SUBTASK_MUTATED } from '../subtask/subtaskQueries'
 import { TASK_MUTATED, TASK_REMOVED, SWIMLANE_MOVED } from '../task/taskQueries'
 import { TICKET_MOVED_IN_COLUMN, TICKET_MOVED_FROM_COLUMN } from '../ticket/ticketQueries'
-import { COLUMN_MUTATED, COLUMN_DELETED } from '../column/columnQueries'
+import { COLUMN_MUTATED, COLUMN_DELETED, COLUMN_MOVED } from '../column/columnQueries'
 import {
     removeSubtaskFromCache,
     removeTaskFromCache,
@@ -11,6 +11,7 @@ import {
     addNewTask,
     cacheTicketMovedInColumn,
     cacheTicketMovedFromColumn,
+    cacheColumnMoved,
     deleteColumnFromCache,
     updateSwimlaneOrderOfBoardToTheCache,
     addNewColumn,
@@ -34,6 +35,14 @@ const useBoardSubscriptions = (id, eventId) => {
                 if (data.columnDeleted.removeType === 'DELETED') {
                     deleteColumnFromCache(columnId, boardId)
                 }
+            },
+        })
+    useSubscription(COLUMN_MOVED,
+        {
+            variables: { boardId: id, eventId },
+            onSubscriptionData: ({ subscriptionData: { data } }) => {
+                const { boardId, newColumnOrder } = data.columnMoved
+                cacheColumnMoved(boardId, newColumnOrder)
             },
         })
     useSubscription(SUBTASK_REMOVED,
