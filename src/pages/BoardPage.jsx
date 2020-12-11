@@ -16,6 +16,7 @@ const BoardPage = ({ id, eventId }) => {
     const classes = boardPageStyles()
     const [view, toggleView] = useState('kanban')
     const [filteredBoard, setFilteredBoard] = useState(null)
+    const [selectedUser, setSelectedUser] = useState('')
     const queryResult = useBoardById(id)
     useBoardSubscriptions(id, eventId)
 
@@ -39,9 +40,17 @@ const BoardPage = ({ id, eventId }) => {
             {view === 'kanban' && (
                 <Grid item classes={{ root: classes.invisibleGrid }}></Grid>
             )}
-            <Grid item><BoardFilter filteredBoard={filteredBoard} setFilteredBoard={setFilteredBoard} board={board} classes={classes} /></Grid>
             <Grid item>
-                {view === 'kanban' ? <Board board={filteredBoard ? filteredBoard : board} /> : <SwimlaneView board={board} />}
+                <BoardFilter
+                    filteredBoard={filteredBoard}
+                    setFilteredBoard={setFilteredBoard}
+                    selectedUser={selectedUser}
+                    setSelectedUser={setSelectedUser}
+                    board={board}
+                    classes={classes} />
+            </Grid>
+            <Grid item>
+                {view === 'kanban' ? <Board board={filteredBoard ? filteredBoard : board} selectedUser={selectedUser} /> : <SwimlaneView board={board} />}
             </Grid>
         </Grid>
     )

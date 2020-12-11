@@ -8,10 +8,10 @@ import {
 } from '@material-ui/core'
 import { filterBoardByOption } from '../../utils/boardFiltering'
 
-const BoardFilter = ({ filteredBoard, setFilteredBoard, board, classes }) => {
+const BoardFilter = ({ filteredBoard, setFilteredBoard, selectedUser, setSelectedUser, board, classes }) => {
     const [filter, setFilter] = useState('')
     const [filterOptions, setFilterOptions] = useState(['Users'])
-    const [selectedUser, setSelectedUser] = useState('')
+    //const [selectedUser, setSelectedUser] = useState('')
     const [filterSelector, setFilterSelector] = useState(false)
     const [optionSelector, setOptionSelector] = useState(false)
     const { users } = board

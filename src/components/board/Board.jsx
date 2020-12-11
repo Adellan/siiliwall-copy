@@ -13,7 +13,7 @@ import { boardPageStyles } from '../../styles/styles'
 import '../../styles.css'
 import { useSnackbarContext } from '../../contexts/SnackbarContext'
 
-const Board = ({ board }) => {
+const Board = ({ board, selectedUser }) => {
     const [moveTicketInColumn] = useMoveTicketInColumn()
     const [moveTicketFromColumn] = useMoveTicketFromColumn()
     const [moveColumn] = useMoveColumn()
@@ -39,7 +39,7 @@ const Board = ({ board }) => {
                             ref={provided.innerRef}
                             spacing={2}
                         >
-                            <Grid item><ColumnList columns={columns} columnOrder={columnOrder} boardId={board.id} /></Grid>
+                            <Grid item><ColumnList columns={columns} columnOrder={columnOrder} boardId={board.id} selectedUser={selectedUser} /></Grid>
                             {provided.placeholder}
 
                         </Grid>

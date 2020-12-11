@@ -10,7 +10,7 @@ import DropdownColumn from './DropdownColumn'
 import AddTaskDialog from '../task/AddTaskDialog'
 import RenameColumn from './RenameColumn'
 
-const Column = ({ column, index }) => {
+const Column = ({ column, index, selectedUser }) => {
     const classes = boardPageStyles()
     const {
         tasks, ticketOrder, subtasks, board,
@@ -61,6 +61,7 @@ const Column = ({ column, index }) => {
                                     ticketOrder={ticketOrder}
                                     column={column}
                                     boardId={board.id}
+                                    selectedUser={selectedUser}
                                 />
                                 {provided.placeholder}
                             </Grid>

@@ -128,9 +128,6 @@ const schema = {
             return dataSources.boardService.getSubtasksByTaskId(root.id)
         },
         owner(root) {
-            if (!root.ownerId) {
-                return null
-            }
             return dataSources.boardService.getOwnerById(root.ownerId)
         },
         members(root) {
