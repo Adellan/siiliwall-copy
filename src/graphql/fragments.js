@@ -143,3 +143,13 @@ export const BOARD_ID_BY_COLUMN_ID = gql`
         }
     }
 `
+export const TICKETORDERS_OF_COLUMNS = gql`
+    fragment ticketOrdersOfColumns on Board {
+        columns {
+            ticketOrder {
+                ticketId 
+                type
+            }
+        }
+    }
+`

@@ -10,7 +10,7 @@ const TicketList = ({
     let ticketsInOrder
 
     if (selectedUser) {
-        ticketsInOrder = filterBoardByUserName(selectedUser, tasks, subtasks)
+        ticketsInOrder = filterBoardByUserName(selectedUser, tasks, subtasks, ticketOrder)
     } else {
         ticketsInOrder = ticketOrder.map((obj) => {
             let foundTicket

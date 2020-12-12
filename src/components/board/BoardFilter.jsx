@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Grid,
     MenuItem,
@@ -6,15 +6,35 @@ import {
     Select,
     Button
 } from '@material-ui/core'
-
 const BoardFilter = ({ selectedUser, setSelectedUser, board, classes }) => {
     const [filter, setFilter] = useState('')
     const [filterOptions, setFilterOptions] = useState(['Users'])
     const [filterSelector, setFilterSelector] = useState(false)
     const [optionSelector, setOptionSelector] = useState(false)
     const [userName, setUserName] = useState('')
+    //const [oldColumnsTicketOrders, setOldColumnsTicketOrders] = useState(null)
     const { users } = board
     const userNames = users.map(user => user.userName)
+
+    // useEffect(() => {
+    //     const ticketOrderOfColumns = getTicketOrderOfColumns(board.id)
+    //     setOldColumnsTicketOrders(ticketOrderOfColumns)
+    // }, [])
+
+    // console.log('oldColumnsTicketOrders', oldColumnsTicketOrders)
+    // const filteredColumnsTicketOrders = board.columns.map(column => column.ticketOrder).flat()
+    // console.log('filteredColumnsTicketOrders', filteredColumnsTicketOrders)
+    // if (oldColumnsTicketOrders) {
+    //     let foundTickets = []
+    //     oldColumnsTicketOrders.columns.map(column => column.ticketOrder.map(ticketOrderObj =>
+    //         filteredColumnsTicketOrders.find(filtTicketOrderObj => {
+    //             if (filtTicketOrderObj.ticketId === ticketOrderObj.ticketId) {
+    //                 foundTickets.push(filtTicketOrderObj)
+    //             }
+    //         })
+    //     ))
+    //     console.log('foundTickets', foundTickets)
+    // }
 
     const switchFilter = (event) => {
         setFilter(event.target.value)
@@ -41,6 +61,7 @@ const BoardFilter = ({ selectedUser, setSelectedUser, board, classes }) => {
     }
 
     const handleFilterClear = () => {
+
         setSelectedUser(null)
     }
 

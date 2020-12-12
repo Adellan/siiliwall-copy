@@ -22,10 +22,26 @@ const Board = ({ board, selectedUser }) => {
     const { setSnackbarMessage } = useSnackbarContext()
 
     const { columnOrder, columns } = board
+    const allTicketsInBoard = columns.map(column => column.tasks.concat(column.subtasks)).flat()
+    const columnsInOrder = columnOrder.map(id => columns.find((column) => column.id === id))
+    const ticketOrderObjectsIdsInOrder = columnsInOrder.map(column => column.ticketOrder.map(ticketOrdObj => ticketOrdObj)).flat()
+    const ticketsInOrder = ticketOrderObjectsIdsInOrder.map(ticketOrdObj => allTicketsInBoard.find(ticket => ticket.id === ticketOrdObj.ticketId))
+
+    const ticketsInOrderFinal = columnsInOrder.map(column => {
+        const ticketsInColumn = ticketsInOrder.map(ticket => {
+            const realOrderIndex = column.ticketOrder.findIndex(obj => obj.ticketId === ticket.id)
+            return { ...ticket, index: realOrderIndex }
+        })
+        return {
+            name: column.name, id: column.id, tickets: ticketsInColumn
+        }
+    })
+
+
     return (
         <Grid container classes={{ root: classes.board }}>
             <DragDropContext onDragEnd={(result) => onDragEnd(
-                result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board, setSnackbarMessage,
+                result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board, setSnackbarMessage, selectedUser, ticketsInOrderFinal
             )}
             >
 

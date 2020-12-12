@@ -1,4 +1,4 @@
-export const filterBoardByUserName = (selectedUser, tasks, subtasks) => {
+export const filterBoardByUserName = (selectedUser, tasks, subtasks, ticketOrder) => {
     let selectedUsersSubtasks,
         selectedUsersTasks,
         filteredUserIsOwner,
@@ -37,8 +37,11 @@ export const filterBoardByUserName = (selectedUser, tasks, subtasks) => {
             return taskWithType
         })
     }
+
     // We want to put the two array together to the TicketList component to sort out
     const filteredTicketObjectArray = selectedUsersTasks.concat(selectedUsersSubtasks)
+    const updatedTicketOrder = ticketOrder.filter(ticketOrderObj => filteredTicketObjectArray.find(ticket => ticket.id === ticketOrderObj.ticketId))
+    const finalTicketObjectArray = updatedTicketOrder.map(ticketOrderObj => filteredTicketObjectArray.find(ticket => ticket.id === ticketOrderObj.ticketId))
 
-    return filteredTicketObjectArray
+    return finalTicketObjectArray
 }

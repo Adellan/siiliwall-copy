@@ -15,7 +15,7 @@ const BoardPage = ({ id, eventId }) => {
     }, [])
     const classes = boardPageStyles()
     const [view, toggleView] = useState('kanban')
-    const [selectedUser, setSelectedUser] = useState('')
+    const [selectedUser, setSelectedUser] = useState(null)
     const queryResult = useBoardById(id)
     useBoardSubscriptions(id, eventId)
 

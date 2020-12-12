@@ -68,7 +68,7 @@ const SwimlaneView = ({ board }) => {
         })
         return { ...task, swimlaneColumns }
     })
-
+    console.log(tasksInOrder)
     const handleShowClick = () => {
         setShowAll(true)
     }
