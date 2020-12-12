@@ -54,27 +54,21 @@ export const onDragEnd = async (
     // When task is moved within one column
     if (destination.droppableId === source.droppableId) {
         const column = columns.find((col) => col.id === source.droppableId)
-        let newTicketOrder,
-            selectedUsersSubtasks,
-            selectedUsersTasks,
-            filteredUserIsOwner,
-            filteredUserIsMember,
-            filteredTicketOrder,
-            filteredTicketOrderArray = []
+        let newTicketOrder
+        const realTicketOrderOfColumn = ticketsInOrderFinal[0].tickets.filter(ticket => ticket.column.id === column.id)
+        const filteredTicketOrder = realTicketOrderOfColumn.filter(ticket => ticket.owner.userName === selectedUser || ticket.members.find(member => member.userName === selectedUser))
 
-        if (selectedUser) {
+        if (selectedUser && realTicketOrderOfColumn.length > filteredTicketOrder.length) {
             const sourceColumnId = source.droppableId.substring(0, 36)
             const destinationColumnId = destination.droppableId.substring(0, 36)
-            //const filteredTicketOrder = realTicketOrderOfColumn.filter(ticket => ticket.owner.userName === selectedUser || ticket.members.find(member => member.userName === selectedUser))
 
-            // If ticket in the filtered board is moved inside one column
+            // When moving ticket inside a single column in the filtered board
             if (destination.droppableId === source.droppableId) {
                 const column = columns.find((col) => col.id === sourceColumnId)
-                const realTicketOrderOfColumn = ticketsInOrderFinal[0].tickets.filter(ticket => ticket.column.id === column.id)
                 const movedTicket = realTicketOrderOfColumn.find(ticket => ticket.id === draggableId)
+                const ticketMovedAside = filteredTicketOrder.find((ticket, index) => index === destination.index ? ticket : null)
                 const realSourceIndex = movedTicket.index
-                const numberOfHiddenTicketsBetweenDragAndDrop = realSourceIndex - source.index
-                const realDestinationIndex = destination.index + numberOfHiddenTicketsBetweenDragAndDrop
+                const realDestinationIndex = ticketMovedAside.index
                 const newTicketOrder = Array.from(column.ticketOrder.map((obj) => ({ ticketId: obj.ticketId, type: obj.type })))
                 const [movedTicketOrderObject] = newTicketOrder.splice(realSourceIndex, 1)
                 newTicketOrder.splice(realDestinationIndex, 0, movedTicketOrderObject)
@@ -95,7 +89,9 @@ export const onDragEnd = async (
         newTicketOrder = Array.from(column.ticketOrder.map((obj) => (
             { ticketId: obj.ticketId, type: obj.type })))
         const movedTicket = newTicketOrder.splice(source.index, 1)
+        console.log('movedTicket', movedTicket)
         newTicketOrder.splice(destination.index, 0, movedTicket[0])
+        console.log('newTicketOrder', newTicketOrder)
 
         let msg = null
         let ticketPrettyId = null
@@ -112,6 +108,7 @@ export const onDragEnd = async (
         }
 
         // Handle cache updates
+        console.log('newTicketOrder', newTicketOrder)
         cacheTicketMovedInColumn(column.id, newTicketOrder)
         // Send mutation to the server
         await moveTicketInColumn({
