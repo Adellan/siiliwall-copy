@@ -13,10 +13,10 @@ export const filterBoardByUserName = (selectedUser, tasks, subtasks, ticketOrder
             if (filteredUserIsMember || filteredUserIsOwner) {
                 return subtask
             }
-            return
+            return null
         })
         selectedUsersSubtasks = selectedUsersSubtasks.map(subtask => {
-            const subtaskWithType = { ...subtask, type: 'subtask' }
+            const subtaskWithType = { ...subtask, type: 'subtask', realIndex: ticketOrder.findIndex(obj => obj.ticketId === subtask.id) }
             return subtaskWithType
         })
     }
@@ -30,10 +30,10 @@ export const filterBoardByUserName = (selectedUser, tasks, subtasks, ticketOrder
             if (filteredUserIsMember || filteredUserIsOwner) {
                 return task
             }
-            return
+            return null
         })
         selectedUsersTasks = selectedUsersTasks.map(task => {
-            const taskWithType = { ...task, type: 'task' }
+            const taskWithType = { ...task, type: 'task', realIndex: ticketOrder.findIndex(obj => obj.ticketId === task.id) }
             return taskWithType
         })
     }

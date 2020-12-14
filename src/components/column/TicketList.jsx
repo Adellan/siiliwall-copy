@@ -33,13 +33,13 @@ const TicketList = ({
                     if (ticket.type === 'task') {
                         component = (
                             <Grid item key={ticket.id}>
-                                <Task index={index} task={ticket} column={column} boardId={boardId} />
+                                <Task index={ticket.realIndex ? ticket.realIndex : index} task={ticket} column={column} boardId={boardId} />
                             </Grid>
                         )
                     } else if (ticket.type === 'subtask') {
                         component = (
                             <Grid item key={ticket.id}>
-                                <Subtask key={ticket.id} index={index} subtask={ticket} column={column} boardId={boardId} />
+                                <Subtask key={ticket.id} index={ticket.realIndex ? ticket.realIndex : index} subtask={ticket} column={column} boardId={boardId} />
                             </Grid>
                         )
                     }
