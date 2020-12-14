@@ -296,24 +296,3 @@ export const cacheColumnMoved = (boardId, newColumnOrder) => {
         },
     })
 }
-
-// export const getTicketOrderOfColumns = (boardId) => {
-//     const boardIdForCache = `Board:${boardId}`
-//     const ticketOrderOfColumns = client.readFragment({
-//         id: boardIdForCache,
-//         fragment: TICKETORDERS_OF_COLUMNS
-//     })
-//     return ticketOrderOfColumns
-// }
-
-// // export const setTicketOrderOfColumns = (boardId, jou) => {
-// //     console.log('jou1', jou)
-// //     const boardIdForCache = `Board:${boardId}`
-// //     client.writeFragment({
-// //         id: boardIdForCache,
-// //         fragment: TICKETORDERS_OF_COLUMNS,
-// //         data: {
-// //             columns: jou
-// //         }
-// //     })
-// // }

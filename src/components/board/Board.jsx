@@ -32,16 +32,13 @@ const Board = ({ board, selectedUser }) => {
             const realOrderIndex = column.ticketOrder.findIndex(obj => obj.ticketId === ticket.id)
             return { ...ticket, index: realOrderIndex }
         })
-        return {
-            name: column.name, id: column.id, tickets: ticketsInColumn
-        }
+        return { id: column.id, name: column.name, tickets: ticketsInColumn }
     })
-
-
+    console.log('ticketsInOrderFinal', ticketsInOrderFinal)
     return (
         <Grid container classes={{ root: classes.board }}>
             <DragDropContext onDragEnd={(result) => onDragEnd(
-                result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board, setSnackbarMessage, selectedUser, ticketsInOrderFinal
+                result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board, setSnackbarMessage, selectedUser, ticketsInOrderFinal, columnsInOrder
             )}
             >
 

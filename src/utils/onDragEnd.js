@@ -15,7 +15,8 @@ export const onDragEnd = async (
     board,
     setSnackbarMessage,
     selectedUser,
-    ticketsInOrderFinal
+    ticketsInOrderFinal,
+    columnsInOrder
 ) => {
     const { destination, source, draggableId } = result
     if (!destination) return
@@ -54,61 +55,68 @@ export const onDragEnd = async (
     // When task is moved within one column
     if (destination.droppableId === source.droppableId) {
         const column = columns.find((col) => col.id === source.droppableId)
-        let newTicketOrder
-        const realTicketOrderOfColumn = ticketsInOrderFinal[0].tickets.filter(ticket => ticket.column.id === column.id)
+        let newTicketOrder, indexForTicketOrder
+        indexForTicketOrder = columnsInOrder.findIndex(col => col.id === column.id)
+        const realTicketOrderOfColumn = ticketsInOrderFinal[indexForTicketOrder].tickets.filter(ticket => ticket.column.id === column.id)
         const filteredTicketOrder = realTicketOrderOfColumn.filter(ticket => ticket.owner.userName === selectedUser || ticket.members.find(member => member.userName === selectedUser))
-
         if (selectedUser && realTicketOrderOfColumn.length > filteredTicketOrder.length) {
             const sourceColumnId = source.droppableId.substring(0, 36)
             const destinationColumnId = destination.droppableId.substring(0, 36)
-
             // When moving ticket inside a single column in the filtered board
             if (destination.droppableId === source.droppableId) {
                 const column = columns.find((col) => col.id === sourceColumnId)
                 const movedTicket = realTicketOrderOfColumn.find(ticket => ticket.id === draggableId)
+                console.log(movedTicket.__typename)
                 const ticketMovedAside = filteredTicketOrder.find((ticket, index) => index === destination.index ? ticket : null)
                 const realSourceIndex = movedTicket.index
                 const realDestinationIndex = ticketMovedAside.index
                 const newTicketOrder = Array.from(column.ticketOrder.map((obj) => ({ ticketId: obj.ticketId, type: obj.type })))
                 const [movedTicketOrderObject] = newTicketOrder.splice(realSourceIndex, 1)
                 newTicketOrder.splice(realDestinationIndex, 0, movedTicketOrderObject)
+
                 cacheTicketMovedInColumn(column.id, newTicketOrder)
 
-                await moveTicketInColumn({
-                    variables: {
-                        orderArray: newTicketOrder,
-                        columnId: column.id,
-                        boardId: board.id,
-                        eventId
-                    },
-                })
+                if (movedTicket)
+                    await moveTicketInColumn({
+                        variables: {
+                            orderArray: newTicketOrder,
+                            columnId: column.id,
+                            boardId: board.id,
+                            eventId
+                        },
+                    })
+
+                const snackbarMsg = movedTicket.__typename === 'Task'
+                    ? `Task ${movedTicket.prettyId} moved in ${column.name}`
+                    : `Subtask ${movedTicket.prettyId} moved in ${column.name}`
+
+                setSnackbarMessage(snackbarMsg)
+
                 return
             }
             return
         }
         newTicketOrder = Array.from(column.ticketOrder.map((obj) => (
             { ticketId: obj.ticketId, type: obj.type })))
+        console.log('vittu', newTicketOrder)
         const movedTicket = newTicketOrder.splice(source.index, 1)
-        console.log('movedTicket', movedTicket)
         newTicketOrder.splice(destination.index, 0, movedTicket[0])
-        console.log('newTicketOrder', newTicketOrder)
 
         let msg = null
         let ticketPrettyId = null
         if (movedTicket[0]?.type === 'task') {
             ticketPrettyId = column.tasks.filter((t) => t.id === movedTicket[0]?.ticketId)
                 .map((f) => f.prettyId)
-            msg = !selectedUser ? `Task ${ticketPrettyId} moved in ${column.name}` : `Task ${movedTicket.prettyId} moved in ${column.name}`
+            msg = `Task ${ticketPrettyId} moved in ${column.name}`
         }
         if (movedTicket[0]?.type === 'subtask') {
             let stask = column.subtasks.map((s) => s.task)
             ticketPrettyId = stask[0]?.prettyId
             const subtask = column.subtasks.find((s) => s.id === movedTicket[0]?.ticketId)
-            msg = !selectedUser ? `Subtask ${subtask.prettyId} moved in ${column.name}` : `Subtask ${movedTicket.prettyId} moved in ${column.name}`
+            msg = `Subtask ${subtask.prettyId} moved in ${column.name}`
         }
 
         // Handle cache updates
-        console.log('newTicketOrder', newTicketOrder)
         cacheTicketMovedInColumn(column.id, newTicketOrder)
         // Send mutation to the server
         await moveTicketInColumn({
