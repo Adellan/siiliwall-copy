@@ -34,7 +34,7 @@ const Board = ({ board, selectedUser }) => {
         })
         return { id: column.id, name: column.name, tickets: ticketsInColumn }
     })
-    console.log('ticketsInOrderFinal', ticketsInOrderFinal)
+
     return (
         <Grid container classes={{ root: classes.board }}>
             <DragDropContext onDragEnd={(result) => onDragEnd(

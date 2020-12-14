@@ -55,50 +55,43 @@ export const onDragEnd = async (
     // When task is moved within one column
     if (destination.droppableId === source.droppableId) {
         const column = columns.find((col) => col.id === source.droppableId)
-        let newTicketOrder, indexForTicketOrder
-        indexForTicketOrder = columnsInOrder.findIndex(col => col.id === column.id)
+        const indexForTicketOrder = columnsInOrder.findIndex(col => col.id === column.id)
         const realTicketOrderOfColumn = ticketsInOrderFinal[indexForTicketOrder].tickets.filter(ticket => ticket.column.id === column.id)
         const filteredTicketOrder = realTicketOrderOfColumn.filter(ticket => ticket.owner.userName === selectedUser || ticket.members.find(member => member.userName === selectedUser))
+
         if (selectedUser && realTicketOrderOfColumn.length > filteredTicketOrder.length) {
             const sourceColumnId = source.droppableId.substring(0, 36)
-            const destinationColumnId = destination.droppableId.substring(0, 36)
             // When moving ticket inside a single column in the filtered board
-            if (destination.droppableId === source.droppableId) {
-                const column = columns.find((col) => col.id === sourceColumnId)
-                const movedTicket = realTicketOrderOfColumn.find(ticket => ticket.id === draggableId)
-                console.log(movedTicket.__typename)
-                const ticketMovedAside = filteredTicketOrder.find((ticket, index) => index === destination.index ? ticket : null)
-                const realSourceIndex = movedTicket.index
-                const realDestinationIndex = ticketMovedAside.index
-                const newTicketOrder = Array.from(column.ticketOrder.map((obj) => ({ ticketId: obj.ticketId, type: obj.type })))
-                const [movedTicketOrderObject] = newTicketOrder.splice(realSourceIndex, 1)
-                newTicketOrder.splice(realDestinationIndex, 0, movedTicketOrderObject)
+            const column = columns.find((col) => col.id === sourceColumnId)
+            const movedTicket = realTicketOrderOfColumn.find(ticket => ticket.id === draggableId)
+            const ticketMovedAside = filteredTicketOrder.find((ticket, index) => index === destination.index ? ticket : null)
+            const realSourceIndex = movedTicket.index
+            const realDestinationIndex = ticketMovedAside.index
+            const newTicketOrder = Array.from(column.ticketOrder.map((obj) => ({ ticketId: obj.ticketId, type: obj.type })))
+            const [movedTicketOrderObject] = newTicketOrder.splice(realSourceIndex, 1)
+            newTicketOrder.splice(realDestinationIndex, 0, movedTicketOrderObject)
 
-                cacheTicketMovedInColumn(column.id, newTicketOrder)
+            cacheTicketMovedInColumn(column.id, newTicketOrder)
 
-                if (movedTicket)
-                    await moveTicketInColumn({
-                        variables: {
-                            orderArray: newTicketOrder,
-                            columnId: column.id,
-                            boardId: board.id,
-                            eventId
-                        },
-                    })
+            await moveTicketInColumn({
+                variables: {
+                    orderArray: newTicketOrder,
+                    columnId: column.id,
+                    boardId: board.id,
+                    eventId
+                },
+            })
 
-                const snackbarMsg = movedTicket.__typename === 'Task'
-                    ? `Task ${movedTicket.prettyId} moved in ${column.name}`
-                    : `Subtask ${movedTicket.prettyId} moved in ${column.name}`
+            const snackbarMsg = movedTicket.__typename === 'Task'
+                ? `Task ${movedTicket.prettyId} moved in ${column.name}`
+                : `Subtask ${movedTicket.prettyId} moved in ${column.name}`
 
-                setSnackbarMessage(snackbarMsg)
+            setSnackbarMessage(snackbarMsg)
 
-                return
-            }
             return
         }
-        newTicketOrder = Array.from(column.ticketOrder.map((obj) => (
+        const newTicketOrder = Array.from(column.ticketOrder.map((obj) => (
             { ticketId: obj.ticketId, type: obj.type })))
-        console.log('vittu', newTicketOrder)
         const movedTicket = newTicketOrder.splice(source.index, 1)
         newTicketOrder.splice(destination.index, 0, movedTicket[0])
 
@@ -135,6 +128,53 @@ export const onDragEnd = async (
     if (destination.droppableId !== source.droppableId) {
         const sourceColumn = columns.find((col) => col.id === source.droppableId)
         const destinationColumn = columns.find((col) => col.id === destination.droppableId)
+        if (selectedUser) {
+            let sourceIndex, destinationIndex
+            const newTicketOrderOfSourceColumn = Array.from(sourceColumn.ticketOrder
+                .map((obj) => ({ ticketId: obj.ticketId, type: obj.type })))
+            const newTicketOrderOfDestinationColumn = Array.from(destinationColumn.ticketOrder
+                .map((obj) => ({ ticketId: obj.ticketId, type: obj.type })))
+
+            const indexForDestinationColumnTicketOrder = columnsInOrder.findIndex(col => col.id === destinationColumn.id)
+            const realTicketOrderOfDestinationColumn = ticketsInOrderFinal[indexForDestinationColumnTicketOrder].tickets.filter(ticket => ticket.column.id === destinationColumn.id)
+            const filteredDestinationTicketOrder = realTicketOrderOfDestinationColumn.filter(ticket => ticket.owner.userName === selectedUser || ticket.members.find(member => member.userName === selectedUser))
+
+            const indexForSourceColumnTicketOrder = columnsInOrder.findIndex(col => col.id === sourceColumn.id)
+            const realTicketOrderOfSourceColumn = ticketsInOrderFinal[indexForSourceColumnTicketOrder].tickets.filter(ticket => ticket.column.id === sourceColumn.id)
+            const filteredSourceTicketOrder = realTicketOrderOfSourceColumn.filter(ticket => ticket.owner.userName === selectedUser || ticket.members.find(member => member.userName === selectedUser))
+
+            const movedTicket = realTicketOrderOfSourceColumn.find(ticket => ticket.id === draggableId)
+
+            if (!filteredDestinationTicketOrder.length) {
+                sourceIndex = movedTicket.index
+                destinationIndex = realTicketOrderOfDestinationColumn.length
+                const [movedTicketOrderObject] = newTicketOrderOfSourceColumn.splice(sourceIndex, 1)
+                newTicketOrderOfDestinationColumn.splice(destinationIndex, 0, movedTicketOrderObject)
+
+                cacheTicketMovedFromColumn(
+                    { type: movedTicketOrderObject.type, ticketId: draggableId },
+                    sourceColumn.id,
+                    destinationColumn.id,
+                    newTicketOrderOfSourceColumn,
+                    newTicketOrderOfDestinationColumn
+                )
+                await moveTicketFromColumn({
+                    variables: {
+                        type: movedTicketOrderObject.type,
+                        ticketId: draggableId,
+                        sourceColumnId: sourceColumn.id,
+                        destColumnId: destinationColumn.id,
+                        sourceTicketOrder: newTicketOrderOfSourceColumn,
+                        destTicketOrder: newTicketOrderOfDestinationColumn,
+                        eventId
+                    },
+                })
+            }
+            return
+        }
+
+
+
         const newTicketOrderOfSourceColumn = Array.from(sourceColumn.ticketOrder
             .map((obj) => ({ ticketId: obj.ticketId, type: obj.type })))
         const newTicketOrderOfDestinationColumn = Array.from(destinationColumn.ticketOrder
@@ -173,17 +213,17 @@ export const onDragEnd = async (
         const updatedsubtasksOfDestinationColumn = []
 
         updatedTicketsOfSourceColumn.forEach((ticket) => {
-            if (ticket.['__typename'] === 'Task') {
+            if (ticket.__typename === 'Task') {
                 updatedTasksOfSourceColumn.push(ticket)
-            } else if (ticket.['__typename'] === 'Subtask') {
+            } else if (ticket.__typename === 'Subtask') {
                 updatedSubtasksOfSourceColumn.push(ticket)
             }
         })
 
         updatedTicketsOfDestinationColumn.forEach((ticket) => {
-            if (ticket.['__typename'] === 'Task') {
+            if (ticket.__typename === 'Task') {
                 updatedTasksOfDestinationColumn.push(ticket)
-            } else if (ticket.['__typename'] === 'Subtask') {
+            } else if (ticket.__typename === 'Subtask') {
                 updatedsubtasksOfDestinationColumn.push(ticket)
             }
         })
