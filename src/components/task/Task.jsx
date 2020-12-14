@@ -7,16 +7,12 @@ import DropdownTask from './DropdownTask'
 import TaskEditDialog from './EditTaskDialog'
 import ColorPill from '../utils/ColorPill'
 import MemberCircle from '../utils/MemberCircle'
+import { add3Dots } from '../../utils/add3Dots'
 
-const Task = ({
-    task, index, column, boardId,
-}) => {
+const Task = ({ task, index, column, boardId }) => {
     const classes = boardPageStyles()
-    const {
-        title, members, owner, prettyId,
-    } = task
+    const { title, members, owner, prettyId } = task
     const titleLimit = 25
-    const dots = '...'
     let tasksOwnerAndMembers
     if (owner) {
         tasksOwnerAndMembers = members.concat(owner)
@@ -27,14 +23,6 @@ const Task = ({
     const [dialogStatus, setDialogStatus] = useState(false)
 
     const toggleDialog = () => setDialogStatus(!dialogStatus)
-
-    const add3Dots = () => {
-        let checkedTitle = title
-        if (title.length > titleLimit) {
-            checkedTitle = title.substring(0, titleLimit) + dots
-        }
-        return checkedTitle
-    }
 
     // Opens task editing dialog
     const handleClick = () => {
@@ -80,7 +68,7 @@ const Task = ({
                     </Grid>
                     <Grid item direction="column" container spacing={1}>
                         <Grid item classes={{ root: classes.taskName }}>
-                            <p>{add3Dots(task.title)}</p>
+                            <p>{add3Dots(title, titleLimit)}</p>
                         </Grid>
                         <Grid item container direction="row" spacing={1} classes={{ root: classes.ticketColorPillsGrid }}>
                             {task.colors ? (

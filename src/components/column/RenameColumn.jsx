@@ -4,26 +4,18 @@ import { Grid } from '@material-ui/core'
 import useEditColumn from '../../graphql/column/hooks/useEditColumn'
 import { boardPageStyles } from '../../styles/styles'
 import { useSnackbarContext } from '../../contexts/SnackbarContext'
+import { add3Dots } from '../../utils/add3Dots'
 
 const RenameColumn = ({ editId, column }) => {
     const [editColumn] = useEditColumn()
     const [name, setName] = useState(column?.name)
     const classes = boardPageStyles()
     const { setSnackbarMessage } = useSnackbarContext()
-    const nameLimit = 19
-    const dots = '...'
+    const nameLimit = 16
 
     useEffect(() => {
         setName(column.name)
     }, [column.name])
-
-    const add3Dots = () => {
-        let checkedName = name
-        if (name.length > nameLimit) {
-            checkedName = name.substring(0, nameLimit) + dots
-        }
-        return checkedName
-    }
 
     const handleSave = (newName) => {
         const eventId = window.localStorage.getItem('eventId')
@@ -47,7 +39,7 @@ const RenameColumn = ({ editId, column }) => {
                 editOnViewClick
                 cancelOnUnfocus
                 type="text"
-                value={add3Dots(name)}
+                value={add3Dots(name, nameLimit)}
                 onSave={handleSave}
                 validationMessage="Name has to have 1 or more characters"
                 validation={(val) => val.length > 0}

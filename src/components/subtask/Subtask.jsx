@@ -7,6 +7,7 @@ import { boardPageStyles } from '../../styles/styles'
 import EditSubtaskDialog from './EditSubtaskDialog'
 import ColorPill from '../utils/ColorPill'
 import MemberCircle from '../utils/MemberCircle'
+import { add3Dots } from '../../utils/add3Dots'
 
 const Subtask = ({
     subtask, index, column, boardId,
@@ -14,7 +15,6 @@ const Subtask = ({
     const classes = boardPageStyles()
     const { name, members, owner } = subtask
     const nameLimit = 25
-    const dots = '...'
     const [dialogStatus, setDialogStatus] = useState(false)
     let subtasksOwnerAndMembers
     if (owner) {
@@ -30,14 +30,6 @@ const Subtask = ({
     }
 
     const handleDialogClick = (e) => e.stopPropagation()
-
-    const add3Dots = () => {
-        let checkedName = name
-        if (name.length > nameLimit) {
-            checkedName = name.substring(0, nameLimit) + dots
-        }
-        return checkedName
-    }
 
     return (
         <Draggable draggableId={subtask.id} index={index}>
@@ -81,7 +73,7 @@ const Subtask = ({
                             <p>{subtask.prettyId}</p>
                         </Grid>
                         <Grid item classes={{ root: classes.subtaskName }}>
-                            <p>{add3Dots(subtask.name)}</p>
+                            <p>{add3Dots(name, nameLimit)}</p>
                         </Grid>
                         <Grid item container direction="row" spacing={1} classes={{ root: classes.ticketColorPillsGrid }}>
                             {subtask.colors ? (
