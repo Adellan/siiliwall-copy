@@ -4,7 +4,6 @@
 import { client } from '../apollo'
 import {
     TICKETORDER_AND_TASKS,
-    TICKETORDERS_OF_COLUMNS,
     SWIMLANE_ORDER,
     TICKETORDER,
     SUBTASKS,
