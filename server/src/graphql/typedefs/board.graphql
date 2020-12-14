@@ -12,7 +12,6 @@ type Board {
 }
 
 type Query {
-  allBoards: [Board!]!
   boardById(id: ID!): Board!
 }
 

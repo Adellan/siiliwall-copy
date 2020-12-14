@@ -9,6 +9,7 @@ import TicketList from './TicketList'
 import DropdownColumn from './DropdownColumn'
 import AddTaskDialog from '../task/AddTaskDialog'
 import RenameColumn from './RenameColumn'
+import propsAreEqual from '../../utils/propsAreEqual'
 
 const Column = ({ column, index, selectedUser }) => {
     const classes = boardPageStyles()
@@ -41,7 +42,7 @@ const Column = ({ column, index, selectedUser }) => {
                                 </Button>
                             </Grid>
                             <Grid item>
-                                <DropdownColumn column={column} boardId={column.board.id} />
+                                <DropdownColumn columnId={column.id} boardId={column.board.id} />
                             </Grid>
                         </Grid>
                     </Grid>
@@ -80,4 +81,5 @@ const Column = ({ column, index, selectedUser }) => {
         </Draggable>
     )
 }
-export default Column
+
+export default React.memo(Column, propsAreEqual)

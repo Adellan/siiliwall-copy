@@ -1,11 +1,12 @@
 import React from 'react'
 import { ExpandMore, ExpandLess } from '@material-ui/icons'
 import { Grid, IconButton } from '@material-ui/core'
+import propsAreEqual from '../../utils/propsAreEqual'
 import { swimlaneStyles } from '../../styles/styles'
 import DropdownTask from '../task/DropdownTask'
 
 const SwimlaneHeaderRow = ({
-    task, column, boardId, prettyId, title, numberOfSubtasks, handleShowClick, toggleEditTaskDialog, show,
+    task, columnId, columnName, boardId, prettyId, title, numberOfSubtasks, handleShowClick, toggleEditTaskDialog, show,
 }) => {
     const classes = swimlaneStyles()
     const handleDialogClick = (e) => e.stopPropagation()
@@ -25,12 +26,13 @@ const SwimlaneHeaderRow = ({
                 <Grid item classes={{ root: classes.swimlanePrettyId }}><p>{prettyId}</p></Grid>
                 <Grid item classes={{ root: classes.swimlaneTitle }}><p>{title}</p></Grid>
             </Grid>
-            <Grid item container classes={{ root: classes.swimlaneHeaderRowRight }} >
+            <Grid item container classes={{ root: classes.swimlaneHeaderRowRight }}>
                 <Grid item classes={{ root: classes.swimlaneNumberOfSubtasks }}>{numberOfSubtasks}</Grid>
                 <Grid item onClick={(e) => handleDialogClick(e)}>
                     <DropdownTask
                         task={task}
-                        column={column}
+                        columnId={columnId}
+                        columnName={columnName}
                         boardId={boardId}
                         calledFromSwimlane={true}
                     />
@@ -40,4 +42,4 @@ const SwimlaneHeaderRow = ({
     )
 }
 
-export default SwimlaneHeaderRow
+export default React.memo(SwimlaneHeaderRow, propsAreEqual)

@@ -121,7 +121,7 @@ const initializeDb = async () => {
 }
 
 if (env === 'development') {
-    initializeDb()
+    // initializeDb()
 }
 
 module.exports = db

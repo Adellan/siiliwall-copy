@@ -151,18 +151,23 @@ export const deleteColumnFromCache = (columnId, boardId) => {
     const boardIdForCache = `Board:${boardId}`
     const data = client.readFragment({
         id: boardIdForCache,
-        fragment: COLUMNORDER,
+        fragment: COLUMNORDER_AND_COLUMNS,
     })
     const newColumnOrder = data.columnOrder.filter((id) => id !== columnId)
-
-    client.writeFragment({
-        id: boardIdForCache,
-        fragment: COLUMNORDER,
-        data: {
-            columnOrder: newColumnOrder,
-        },
-    })
-    client.cache.evict({ id: idToBeDeleted })
+    const newColumns = data.columns.filter((column) => column.id !== columnId)
+    try {
+        client.cache.evict({ id: idToBeDeleted })
+        client.writeFragment({
+            id: boardIdForCache,
+            fragment: COLUMNORDER_AND_COLUMNS,
+            data: {
+                columnOrder: newColumnOrder,
+                columns: newColumns,
+            },
+        })
+    } catch (e) {
+        console.log(e)
+    }
 }
 
 export const addNewSubtask = (addedSubtask) => {

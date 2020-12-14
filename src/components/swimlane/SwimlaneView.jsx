@@ -1,6 +1,6 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable max-len */
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Grid, Button } from '@material-ui/core'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { useApolloClient } from '@apollo/client'
@@ -68,14 +68,14 @@ const SwimlaneView = ({ board }) => {
         })
         return { ...task, swimlaneColumns }
     })
-    console.log(tasksInOrder)
-    const handleShowClick = () => {
-        setShowAll(true)
-    }
 
-    const handleHideClick = () => {
+    const handleShowClick = useCallback(() => {
+        setShowAll(true)
+    }, [setShowAll])
+
+    const handleHideClick = useCallback(() => {
         setShowAll(false)
-    }
+    }, [setShowAll])
 
     return (
         <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, tasksInOrder, board.id, setSnackbarMessage)}>
@@ -101,7 +101,7 @@ const SwimlaneView = ({ board }) => {
                 <Droppable droppableId={board.id} direction="vertical" type="swimlane">
                     {(provided) => (
                         <Grid item {...provided.droppableProps} ref={provided.innerRef} classes={{ root: classes.swimlaneListGrid }}>
-                            <SwimlaneList tasksInOrder={tasksInOrder} showAll={showAll} setShowAll={setShowAll} boardId={board.id} />
+                            <SwimlaneList tasksInOrder={tasksInOrder} showAll={showAll} boardId={board.id} />
                             {provided.placeholder}
                         </Grid>
                     )}

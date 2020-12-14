@@ -1,9 +1,10 @@
 import React from 'react'
 import { Grid } from '@material-ui/core'
+import propsAreEqual from '../../utils/propsAreEqual'
 import { swimlaneStyles } from '../../styles/styles'
 import SwimlaneColumn from './SwimlaneColumn'
 
-const SwimlaneColumnList = ({ swimlaneColumns, taskId, boardId, }) => {
+const SwimlaneColumnList = ({ swimlaneColumns, taskId, boardId }) => {
     const classes = swimlaneStyles()
     const mostSubtasks = Math.max(...swimlaneColumns.map((swimlaneColumn) => swimlaneColumn.subtasks.length))
     return (
@@ -27,4 +28,5 @@ const SwimlaneColumnList = ({ swimlaneColumns, taskId, boardId, }) => {
         </Grid>
     )
 }
-export default SwimlaneColumnList
+
+export default React.memo(SwimlaneColumnList, propsAreEqual)

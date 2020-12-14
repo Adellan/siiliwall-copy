@@ -8,6 +8,7 @@ import {
 
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { useApolloClient } from '@apollo/client'
+import propsAreEqual from '../../utils/propsAreEqual'
 import AlertBox from '../utils/AlertBox'
 import AddSubtaskDialog from '../subtask/AddSubtaskDialog'
 import TaskEditDialog from './EditTaskDialog'
@@ -15,7 +16,7 @@ import { boardPageStyles } from '../../styles/styles'
 import { COLUMNORDER_AND_COLUMNS } from '../../graphql/fragments'
 
 const DropdownTask = ({
-    column, task, boardId, calledFromSwimlane,
+    columnId, columnName, task, boardId, calledFromSwimlane,
 }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const [action, setAction] = useState(null)
@@ -139,23 +140,28 @@ const DropdownTask = ({
                 editId={task.id}
                 task={task}
             />
-            <AlertBox
-                alertDialogStatus={alertDialogStatus}
-                toggleAlertDialog={toggleAlertDialog}
-                task={task}
-                column={column}
-                boardId={boardId}
-                action={action}
-                count={count}
-            />
+            {alertDialogStatus && (
+                <AlertBox
+                    alertDialogStatus={alertDialogStatus}
+                    toggleAlertDialog={toggleAlertDialog}
+                    task={task}
+                    columnId={columnId}
+                    columnName={columnName}
+                    boardId={boardId}
+                    action={action}
+                    count={count}
+                />
+            )}
+
             <AddSubtaskDialog
                 addDialogStatus={addDialogStatus}
                 toggleAddDialog={toggleAddDialog}
-                column={column}
+                columnId={columnId}
                 taskId={task.id}
                 boardId={boardId}
             />
         </Grid>
     )
 }
-export default DropdownTask
+
+export default React.memo(DropdownTask, propsAreEqual)

@@ -35,7 +35,7 @@ class BoardService {
         let boardsFromDb
         try {
             boardsFromDb = await this.store.Board.findAll({
-                where: { projectId }
+                where: { projectId },
             })
         } catch (e) {
             console.error(e)
@@ -204,7 +204,7 @@ class BoardService {
                 arrayOfIds.map(async (id) => {
                     const color = await this.store.Color.findByPk(id)
                     return color
-                })
+                }),
             )
         } catch (e) {
             console.log(e)
@@ -222,7 +222,7 @@ class BoardService {
                 arrayOfIds.map(async (id) => {
                     const color = await this.store.Color.findByPk(id)
                     return color
-                })
+                }),
             )
         } catch (e) {
             console.log(e)
@@ -348,8 +348,8 @@ class BoardService {
                 await this.store.ColorTask.destroy({
                     where: {
                         colorId,
-                        taskId: task.id
-                    }
+                        taskId: task.id,
+                    },
                 })
             }))
         } catch (e) {
@@ -475,7 +475,7 @@ class BoardService {
         let addedBoard
         try {
             const largestOrderNumber = await this.store.Board.max('orderNumber', {
-                where: { projectId }
+                where: { projectId },
             })
             addedBoard = await this.store.Board.create({
                 id: uuid(),
@@ -483,7 +483,7 @@ class BoardService {
                 prettyId,
                 color,
                 orderNumber: largestOrderNumber + 1,
-                projectId
+                projectId,
             })
         } catch (e) {
             console.error(e)
@@ -616,7 +616,7 @@ class BoardService {
             await Promise.all(
                 colorIds.map(async (colorId) => {
                     await this.addColorForTask(addedTask.id, colorId)
-                })
+                }),
             )
         } catch (e) {
             console.error(e)
@@ -672,7 +672,7 @@ class BoardService {
             await this.store.ColorTask.create({
                 id: uuid(),
                 colorId,
-                taskId
+                taskId,
             })
             task = await this.store.Task.findByPk(taskId)
         } catch (e) {
@@ -687,7 +687,7 @@ class BoardService {
             await this.store.ColorSubtask.create({
                 id: uuid(),
                 colorId,
-                subtaskId
+                subtaskId,
             })
             subtask = await this.store.Subtask.findByPk(subtaskId)
         } catch (e) {

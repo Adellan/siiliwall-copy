@@ -16,6 +16,7 @@
     "graphql": "^15.3.0",
     "graphql-subscriptions": "^1.1.0",
     "history": "^4.10.1",
+    "lodash.isequal": "^4.5.0",
     "notistack": "^1.0.1",
     "react": "^16.14.0",
     "react-beautiful-dnd": "^12.2.0",

@@ -1,5 +1,5 @@
 /* eslint-disable array-callback-return */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Grid, Divider } from '@material-ui/core'
 import { Draggable } from 'react-beautiful-dnd'
 import { swimlaneStyles } from '../../styles/styles'
@@ -9,14 +9,14 @@ import ProgressBarComponent from './ProgressBarComponent'
 import TaskEditDialog from '../task/EditTaskDialog'
 
 const Swimlane = ({
-    task, index, showAll, setShowAll, boardId,
+    task, index, showAll, boardId,
 }) => {
     const classes = swimlaneStyles()
     const [show, setShow] = useState(false)
     const [editTaskDialogStatus, setEditTaskDialogStatus] = useState(false)
-    const toggleEditTaskDialog = () => {
-        setEditTaskDialogStatus(!editTaskDialogStatus)
-    }
+    const toggleEditTaskDialog = useCallback(() => {
+        setEditTaskDialogStatus((prev) => !prev)
+    }, [setEditTaskDialogStatus])
     // Calculate the percentage for progressBar
     const percentageForProgressBar = ((task.swimlaneColumns
         .findIndex((swimlaneColumn) => swimlaneColumn.id === task.column.id) + 1) / task.swimlaneColumns.length) * 100
@@ -26,11 +26,10 @@ const Swimlane = ({
         setShow(showAll)
     }, [showAll])
 
-    const handleShowClick = (e) => {
+    const handleShowClick = useCallback((e) => {
         e.stopPropagation()
-        setShow(!show)
-        setShowAll(null)
-    }
+        setShow((s) => !s)
+    }, [setShow])
 
     const numberOfSubtasks = task.swimlaneColumns
         .reduce((acc, cur) => parseInt(acc + cur.subtasks.length, 10), 0)
@@ -50,7 +49,8 @@ const Swimlane = ({
                     <SwimlaneHeaderRow
                         task={task}
                         boardId={boardId}
-                        column={task?.column}
+                        columnId={task?.column.id}
+                        columnName={task?.columnName}
                         prettyId={task.prettyId}
                         title={task.title}
                         numberOfSubtasks={numberOfSubtasks}

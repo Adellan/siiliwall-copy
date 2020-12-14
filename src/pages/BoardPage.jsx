@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Grid } from '@material-ui/core'
 import Board from '../components/board/Board'
 import SwimlaneView from '../components/swimlane/SwimlaneView'
@@ -19,12 +19,12 @@ const BoardPage = ({ id, eventId }) => {
     const queryResult = useBoardById(id)
     useBoardSubscriptions(id, eventId)
 
+    const switchView = useCallback((viewParam) => {
+        toggleView(viewParam)
+    }, [toggleView])
+
     if (queryResult.loading) return null
     const board = queryResult.data.boardById
-
-    const switchView = (viewParam) => {
-        toggleView(viewParam)
-    }
 
     return (
         <Grid
@@ -35,7 +35,7 @@ const BoardPage = ({ id, eventId }) => {
         >
             <Header boardName={board.name} boardPrettyId={board.prettyId} switchView={switchView} view={view} />
             {view === 'kanban' && (
-                <Grid item classes={{ root: classes.invisibleGrid }}></Grid>
+                <Grid item classes={{ root: classes.invisibleGrid }} />
             )}
             <Grid item>
                 <BoardFilter

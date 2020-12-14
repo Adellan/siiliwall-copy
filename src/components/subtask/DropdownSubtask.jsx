@@ -4,10 +4,11 @@ import {
 } from '@material-ui/core'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { Delete, Archive } from '@material-ui/icons'
+import propsAreEqual from '../../utils/propsAreEqual'
 import { boardPageStyles } from '../../styles/styles'
 import AlertBox from '../utils/AlertBox'
 
-const DropdownSubtask = ({ subtask, column, boardId }) => {
+const DropdownSubtask = ({ subtask, columnId, boardId }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const classes = boardPageStyles()
     const [alertDialogStatus, setAlertDialogStatus] = useState(false)
@@ -64,10 +65,11 @@ const DropdownSubtask = ({ subtask, column, boardId }) => {
                 toggleAlertDialog={toggleAlertDialog}
                 action={action}
                 subtask={subtask}
-                column={column}
+                columnId={columnId}
                 boardId={boardId}
             />
         </Grid>
     )
 }
-export default DropdownSubtask
+
+export default React.memo(DropdownSubtask, propsAreEqual)

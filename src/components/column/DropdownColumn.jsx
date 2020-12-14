@@ -2,14 +2,15 @@ import React, { useState } from 'react'
 import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
 } from '@material-ui/core'
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import MoreVertIcon from '@material-ui/icons/MoreVert'
 import Delete from '@material-ui/icons/Delete'
 import { useApolloClient } from '@apollo/client'
+import propsAreEqual from '../../utils/propsAreEqual'
 import { TICKETORDER } from '../../graphql/fragments'
 import AlertBox from '../utils/AlertBox'
 import { boardPageStyles } from '../../styles/styles'
 
-const DropdownColumn = ({ column, boardId }) => {
+const DropdownColumn = ({ columnId, boardId }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const [action, setAction] = useState(null)
     const [alertDialogStatus, setAlertDialogStatus] = useState(false)
@@ -17,7 +18,7 @@ const DropdownColumn = ({ column, boardId }) => {
     const client = useApolloClient()
 
     const data = client.readFragment({
-        id: `Column:${column.id}`,
+        id: `Column:${columnId}`,
         fragment: TICKETORDER,
     })
     if (!data) return null
@@ -66,11 +67,12 @@ const DropdownColumn = ({ column, boardId }) => {
             <AlertBox
                 alertDialogStatus={alertDialogStatus}
                 toggleAlertDialog={toggleAlertDialog}
-                column={column}
+                columnId={columnId}
                 boardId={boardId}
                 action={action}
             />
         </Grid>
     )
 }
-export default DropdownColumn
+
+export default React.memo(DropdownColumn, propsAreEqual)

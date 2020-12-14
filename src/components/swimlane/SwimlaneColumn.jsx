@@ -3,6 +3,7 @@ import React from 'react'
 import { Grid } from '@material-ui/core'
 import { Droppable } from 'react-beautiful-dnd'
 import Divider from '@material-ui/core/Divider'
+import propsAreEqual from '../../utils/propsAreEqual'
 import { swimlaneStyles } from '../../styles/styles'
 import Subtask from '../subtask/Subtask'
 
@@ -12,7 +13,6 @@ const SwimlaneColumn = ({
     const { subtasks } = swimlaneColumn
     const classes = swimlaneStyles()
     const heightOfTheDivider = mostSubtasks > 1 ? mostSubtasks * 140 : 1 * 140
-
     const idForDroppable = `${swimlaneColumn.id}${taskId}`
     return (
         <Grid container direction="row">
@@ -28,7 +28,7 @@ const SwimlaneColumn = ({
                     >
                         {subtasks.map((subtask) => (
                             <Grid item key={subtask.id}>
-                                <Subtask subtask={subtask} index={subtask.index} column={swimlaneColumn} boardId={boardId} />
+                                <Subtask subtask={subtask} index={subtask.index} columnId={swimlaneColumn.id} boardId={boardId} />
                             </Grid>
                         ))}
                         {provided.placeholder}
@@ -43,4 +43,5 @@ const SwimlaneColumn = ({
 
     )
 }
-export default SwimlaneColumn
+
+export default React.memo(SwimlaneColumn, propsAreEqual)

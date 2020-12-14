@@ -77,12 +77,6 @@ export const SUBTASKS_OF_BOARD = gql`
         }
     }
 `
-export const PRIORITIZED_AND_SWIMLANEORDERNUMBER = gql`
-    fragment prioritizedAndSwimlaneOrderNumber on Task {
-        prioritized
-        swimlaneOrderNumber
-    }
-`
 
 export const COLUMNORDER = gql`
     fragment columnOrder on Board {
@@ -94,6 +88,7 @@ export const COLUMNORDER_AND_COLUMNS = gql`
     fragment columnOrderAndColumns on Board {
         columnOrder
         columns {
+            id
             subtasks {
                 id
                 task {

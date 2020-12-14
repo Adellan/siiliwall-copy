@@ -4,6 +4,7 @@ import {
 } from '@material-ui/core'
 import ViewAgendaOutlinedIcon from '@material-ui/icons/ViewAgendaOutlined'
 import ViewWeekOutlinedIcon from '@material-ui/icons/ViewWeekOutlined'
+import isEqual from 'lodash.isequal'
 import { headerStyles } from '../../styles/styles'
 import Hedgehog from './Hedgehog'
 
@@ -71,4 +72,11 @@ const Header = (props) => {
     )
 }
 
-export default Header
+const propsAreEqual = (prevProps, nextProps) => {
+    if (isEqual(prevProps, nextProps)) {
+        return true
+    }
+    return false
+}
+
+export default React.memo(Header, propsAreEqual)

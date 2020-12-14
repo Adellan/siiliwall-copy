@@ -113,6 +113,7 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
                 orderArray: newTicketOrder,
                 columnId: column.id,
                 boardId,
+                eventId,
             },
         })
         const msg = `Subtask ${subtask.prettyId} moved in ${column.name}`
